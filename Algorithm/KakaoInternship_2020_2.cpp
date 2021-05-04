@@ -1,44 +1,41 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <math.h>
 using namespace std;
 
 string cal(string str, int p, char c) {
-	string f, s;
+	int s = 0 , f = 0;
 	int fn, sn, sum;
+	string front, back;
 	for (int i = p + 1; ; i++) {
 		if (str[i] >= '0' && str[i] <= '9') {
-			string tmp;
-			tmp[0] = str[i];
-			s.append(tmp);
+			s = s * 10 + int(str[i] - '0');
 			sn = i;
 		}
 		else break;
 	}
 	for (int i = p - 1; ; i--) {
 		if (str[i] >= '0' && str[i] <= '9') {
-			string tmp;
-			tmp[0] = str[i];
-			f.insert(0, tmp);
+			f = f + int(str[i] - '0')*pow(10 , (p - 1 - i));
 			fn = i;
 		}
 		else break;
 	}
 	if (c == '+')
-		sum = stoi(s) + stoi(f);
+		sum = s + f;
 	else if (c == '*')
-		sum = stoi(s) * stoi(f);
+		sum = s * f;
 	else
-		sum = stoi(s) - stoi(f);
-	s.clear();
-	f.clear();
+		sum = s - f;
+	
 	for (int i = 0; i < fn; i++) {
-		f += str[i];
+		front += str[i];
 	}
 	for (int i = sn + 1; i < str.size(); i++) {
-		s += str[i];
+		back += str[i];
 	}
-	return str = f + std::to_string(sum) + s;
+	return str = front + std::to_string(sum) + back;
 }
 
 int max(int a, int b) {
@@ -67,4 +64,5 @@ int main(void) {
 	cout << solution(s);
 }
 //https://tech.kakao.com/2020/07/01/2020-internship-test/
-//0503cal함수에서 숫자 추출하는 부분을 좀 더 고민해봐야겠음...
+//0503 cal함수에서 숫자 추출하는 부분을 좀 더 고민해봐야겠음...
+//0504 cal함수에서 숫자 추출하고 연산하는 부분까지 했음 앞뒤로 남은 문자열과 함께 다시 합치는 부분  
