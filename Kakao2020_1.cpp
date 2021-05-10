@@ -5,17 +5,39 @@
 using namespace std;
 
 int solution(string s) {
+	int answer = 0;
 	int n = s.length();
 	int cnt = 0, i = 0;
-	for (int k = 1; k <= n / 2; k++) { // °°À» ¼ö ÀÖ´Â ¹®ÀÚ¿­ÀÇ ÃÑ±æÀÌ
-		if (i + k > n) { // ¹üÀ§°¡ ¹þ¾î³ª¹ö¸²
-			cnt += n - i;
-			break;
+	for (int k = 1; k <= n / 2; k++) { // ì••ì¶•í•  ìˆ˜ ìžˆëŠ” ê¸¸ì´
+		while (i < n) {
+			int equals = 0, next = 0;
+			if (i + k > n) { // ë²”ìœ„ê°€ ë²—ì–´ë‚˜ë²„ë¦¼
+				cnt += n - i;
+				break;
+			}
+			for (int j = i + k; j < n; j += k) {
+				int t;
+				for (t = 0; t < k; t++) {	
+					if (s[i + t] != s[j + t])break;
+				}
+				if (t == k) equals++;
+				else {
+					next = j; break;
+				}
+			}
+			if (equals) {
+				if (equals + 1 <= 9)cnt += k + 1;
+				else if (equals + 1 <= 99)cnt += k + 2;
+				else if (equals + 1 <= 999)cnt += k + 3;
+				else  cnt += k + 4;
+			}
+			else cnt += k;
+			if (next == 0)break;
+			i = next;
+
 		}
-		// ºñ±³ÇÏ´Â ºÎºÐ °í¹Î
-	
+		if (cnt < answer) answer = cnt;
 	}
-	int answer = 0;
 	return answer;
 }
 
@@ -25,4 +47,4 @@ int main(void) {
 
 }
 //https://tech.kakao.com/2019/10/02/kakao-blind-recruitment-2020-round1/
-//¹®ÀÚ¿­ÀÇ ±æÀÌ°¡ nÀÏ¶§ 2/n º¸´Ù Å©°Ô Àß¶ó¾ß ÇÔ
+//ë¬¸ìžì—´ì˜ ê¸¸ì´ê°€ nì¼ë•Œ 2/n ë³´ë‹¤ í¬ê²Œ ìž˜ë¼ì•¼ í•¨
