@@ -26,7 +26,7 @@ void bfs(int a, int b) {
 			int nx = x + dx[i];
 			int ny = y + dy[i];
 			if (nx < 0 || nx >= n || ny < 0 || ny >= m) continue;
-			if (!cheese[nx][ny]) q2.push(make_pair(x, y));
+			if (!cheese[nx][ny] && visited[nx][ny]) q2.push(make_pair(x, y));
 			if (cheese[nx][ny]&&(!visited[nx][ny])) {
 				visited[nx][ny] = true;
 				q1.push(make_pair(nx, ny));
@@ -53,6 +53,21 @@ int main(void) {
 		for (int j = 0; j < m; j++) {
 			if (cheese[i][j] == 1) {
 				visited[i][j] = true;
+				queue<pair<int, int>>q;
+				q.push(make_pair(0, 0));
+				while (!q.empty()) {
+					int x = q.front().first;
+					int y = q.front().second;
+					q.pop();
+					for (int i = 0; i < 4; i++) {
+						int nx = x + dx[i];
+						int ny = y + dy[i];
+						if (!visited[ny][nx] && !cheese[ny][nx]) {
+							visited[ny][nx] = true;
+							q.push(make_pair(ny, nx));
+						}
+					}
+				}
 				bfs(i, j);
 				memset(visited, false, sizeof(visited));
 				cnt1++;
@@ -62,4 +77,5 @@ int main(void) {
 	cout << cnt1 << "\n" << cnt2;
 }
 //https://www.acmicpc.net/problem/2636
-//ºùÇÏ¹®Á¦¶û ºñ½ÁÇÏ´Ù°í »ý°¢Çß´Âµ¥ Ä¡Áî ±¸¸Û¾È¿¡¼­´Â Ä¡Áî°¡ ³ìÁö ¾Ê´Â´Ù´Â Á¡À» ³õÄ§
+//0511 ë¹™í•˜ë¬¸ì œëž‘ ë¹„ìŠ·í•˜ë‹¤ê³  ìƒê°í–ˆëŠ”ë° ì¹˜ì¦ˆ êµ¬ë©ì•ˆì—ì„œëŠ” ì¹˜ì¦ˆê°€ ë…¹ì§€ ì•ŠëŠ”ë‹¤ëŠ” ì ì„ ë†“ì¹¨
+//0512 í…Œë‘ë¦¬ëŠ” ì¹˜ì¦ˆë„ ê³µê¸°ë„ ì°¨ì§€ ì•ŠëŠ” ê³µê°„ìž„ìœ¼ë¡œ (0,0)ë¶€í„° BFSë¥¼ ëŒë ¤ ê³µê¸° ë¶€ë¶„ì„ ì²˜ë¦¬
