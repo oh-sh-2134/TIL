@@ -35,8 +35,8 @@ void bfs(int a, int b) {
 		}
 	}
 	while (!q2.empty()) {
-		int x = q1.front().first;
-		int y = q1.front().second;
+		int x = q2.front().first;
+		int y = q2.front().second;
 		q2.pop();
 		cheese[x][y] = 0;
 	}
@@ -79,3 +79,4 @@ int main(void) {
 //https://www.acmicpc.net/problem/2636
 //0511 빙하문제랑 비슷하다고 생각했는데 치즈 구멍안에서는 치즈가 녹지 않는다는 점을 놓침
 //0512 테두리는 치즈도 공기도 차지 않는 공간임으로 (0,0)부터 BFS를 돌려 공기 부분을 처리
+//0513 방향성이 조금 잘못된거 같음 마지막 남은 치즈를 구하는 방법을 
