@@ -31,6 +31,7 @@ int solution() { // 정련된 전깃줄의 반대편의 증가하는 최대길�
 void Input() { // 전깃줄을 입력받고 정렬까지 함
 	int a, b;
 	cin >> n;
+	v.emplace_back(0, 0);
 	for (int i = 0; i < n; i++) {
 		cin >> a >> b;
 		v.emplace_back(a, b);
