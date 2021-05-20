@@ -14,7 +14,8 @@ int max(int a, int b) {
 	return a > b ? a : b;
 }
 
-void solution() {
+int solution() {
+	int cnt = 0;
 	queue<pair<int, int>>q;
 	q.push(make_pair(0, 0));
 	while (!q.empty()) {
@@ -25,14 +26,17 @@ void solution() {
 			int ny = y + dy[i];
 			int nx = x + dx[i];
 			if (!(nx > 0 || nx <= N || ny > 0 || ny <= M)) continue;
+			if ((ny == M - 1) && (nx == N - 1)) {
+				cnt++;
+				continue;
+			}
 			if (load[y][x] > load[ny][nx]) {
 				q.push(make_pair(ny, nx));
 				dp[ny][nx] = dp[y][x];
-				dp[y][x]++;
 			}
 		}
-		dp[y][x] --;
 	}
+	return cnt;
 }
 
 void Input() {
@@ -44,9 +48,10 @@ void Input() {
 	}
 }
 int main() {
+	int sol;
 	Input();
-	solution();
-	cout << dp[M-1][N-1];
+	sol = solution();
+	cout << sol;
 }
 //https://www.acmicpc.net/problem/1520
-//0519 
+//제출시 바운더리에러나는 부분 해결필요...
