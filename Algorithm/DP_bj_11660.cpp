@@ -17,7 +17,7 @@ void Input() {
 	}
 	int x1, x2, y1, y2;
 	for (int i = 0; i < M; i++) {
-		cin >> x1 >> y1 >> x2 >> y2;
+		cin >> y1 >> x1 >> y2 >> x2;
 		xy.push_back(make_pair(make_pair(y1, x1),(make_pair(y2,x2))));
 	}
 }
