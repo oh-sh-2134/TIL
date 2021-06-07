@@ -15,8 +15,8 @@ queue<pair<int, int>> q;
 
 void solution()
 {
-	q.push( make_pair(jx,jy) );
-	visited[jx][jy] = 1;
+	q.push( make_pair(jy,jx) );
+	visited[jy][jx] = 1;
 
 	while (!q.empty()) {
 		int y = q.front().first;
