@@ -56,6 +56,55 @@ void Input()
 	}
 }
 
+void BFS(int a, int b)
+{
+    queue<pair<pair<int, int>, int>> Q;
+    Q.push(make_pair(make_pair(a, b), 0));
+    visited[a][b] = true;
+ 
+    while (Q.empty() == 0)
+    {
+        int x = Q.front().first.first;
+        int y = Q.front().first.second;
+        int Dist = Q.front().second;
+        Q.pop();
+ 
+        for (int i = 0; i < 4; i++)
+        {
+            int nx = x + dx[i];
+            int ny = y + dy[i];
+ 
+            if (nx < 0 || ny < 0 || nx >= N || ny >= N) continuew;
+            
+            if (!visited[nx][ny])
+            {
+                if (arr[nx][ny] == 0)
+                {
+                    visited[nx][ny] = true;
+                    Q.push(make_pair(make_pair(nx, ny), Dist + 1));
+                }
+                else if (arr[nx][ny] < S.Size)
+                {
+                    Food Temp;
+                    Temp.x = nx;
+                    Temp.y = ny;
+                    Temp.Dist = Dist + 1;
+ 
+                    V.push_back(Temp);
+                    visited[nx][ny] = true;
+                    Q.push(make_pair(make_pair(nx, ny), Dist + 1));
+                }
+                else if (arr[nx][ny] == S.Size)
+                {
+                    visited[nx][ny] = true;
+                    Q.push(make_pair(make_pair(nx, ny), Dist + 1));
+                }
+            }
+            
+        }
+    }
+}
+
 
 int main(void)
 {
