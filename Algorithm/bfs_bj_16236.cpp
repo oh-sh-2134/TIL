@@ -105,6 +105,53 @@ void BFS(int a, int b)
     }
 }
 
+void solution()
+{
+    while (1)
+    {
+        V.clear();
+        memset(visited, false, sizeof(visited));
+ 
+        BFS(S.x, S.y);
+        if (V.size() == 0)
+        {
+            cout << S.Time << endl;
+            break;
+        }
+        else if (V.size() == 1)
+        {
+            arr[V[0].x][V[0].y] = 9;
+            arr[S.x][S.y] = 0;
+            S.x = V[0].x;
+            S.y = V[0].y;
+            S.Eat_Num++;
+            S.Time = S.Time + V[0].Dist;
+ 
+            if (S.Eat_Num == S.Size)
+            {
+                S.Eat_Num = 0;
+                S.Size++;
+            }
+        }
+        else
+        {
+            sort(V.begin(), V.end(), Sorting_Standard);
+            arr[V[0].x][V[0].y] = 9;
+            arr[S.x][S.y] = 0;
+            S.x = V[0].x;
+            S.y = V[0].y;
+            S.Eat_Num++;
+            S.Time = S.Time + V[0].Dist;
+ 
+            if (S.Eat_Num == S.Size)
+            {
+                S.Eat_Num = 0;
+                S.Size++;
+            }
+        }
+    }
+}
+
 
 int main(void)
 {
@@ -119,4 +166,6 @@ int main(void)
 너무 어려워서 설명을 보고 클론 코딩...
 https://yabmoons.tistory.com/160
 
+BFS 이해 완
+solution 넘나 어렵..
 */
