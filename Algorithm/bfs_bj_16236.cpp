@@ -43,8 +43,8 @@ void Input()
 	{
 		for (int j = 0; j < N; j++)
 		{
-			cin >> MAP[i][j];
-			if (MAP[i][j] == 9)
+			cin >> arr[i][j];
+			if (arr[i][j] == 9)
 			{
 				S.x = i;
 				S.y = j;
@@ -74,7 +74,7 @@ void BFS(int a, int b)
             int nx = x + dx[i];
             int ny = y + dy[i];
  
-            if (nx < 0 || ny < 0 || nx >= N || ny >= N) continuew;
+            if (nx < 0 || ny < 0 || nx >= N || ny >= N) continue;
             
             if (!visited[nx][ny])
             {
@@ -150,12 +150,38 @@ void solution()
             }
         }
     }
+	cout << S.Time;	
 }
 
-
+bool Sorting_Standard(Food A, Food B)
+{
+    if (A.Dist <= B.Dist)
+    {
+        if (A.Dist == B.Dist)
+        {
+            if (A.x <= B.x)
+            {
+                if (A.x == B.x)
+                {
+                    if (A.y < B.y)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+        return true;
+    }
+    return false;
+}
+ 
 int main(void)
 {
-	
+	Input();
+	solution();	
 }
 //https://www.acmicpc.net/problem/16236
 /*
