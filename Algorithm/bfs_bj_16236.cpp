@@ -105,6 +105,32 @@ void BFS(int a, int b)
     }
 }
 
+bool Sorting_Standard(Food A, Food B)
+{
+    if (A.Dist <= B.Dist)
+    {
+        if (A.Dist == B.Dist)
+        {
+            if (A.x <= B.x)
+            {
+                if (A.x == B.x)
+                {
+                    if (A.y < B.y)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        }
+        return true;
+    }
+    return false;
+}
+ 
+
 void solution()
 {
     while (1)
@@ -150,34 +176,8 @@ void solution()
             }
         }
     }
-	cout << S.Time;	
 }
 
-bool Sorting_Standard(Food A, Food B)
-{
-    if (A.Dist <= B.Dist)
-    {
-        if (A.Dist == B.Dist)
-        {
-            if (A.x <= B.x)
-            {
-                if (A.x == B.x)
-                {
-                    if (A.y < B.y)
-                    {
-                        return true;
-                    }
-                    return false;
-                }
-                return true;
-            }
-            return false;
-        }
-        return true;
-    }
-    return false;
-}
- 
 int main(void)
 {
 	Input();
