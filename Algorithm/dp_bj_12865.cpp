@@ -31,7 +31,7 @@ void solution()
 {
 	for(int i=0;i<=n;i++)
 	{
-		if(dp[v[i].first] == 0) dp[v[i].first] = dp[v[i-1].first];
+		if(dp[v[i].first] == 0) dp[v[i].first] = dp[v[i-1].second];
 		dp[v[i].first] = max(max(dp[v[i].first],v[i].second),v[i].second+dp[n-v[i].first]);
 	}
 	cout << dp[v[n].first];
@@ -45,4 +45,4 @@ int main(void)
 }
 
 //acmicpc.net/problem/12865
-//¹ÞÀº ¹è¿­À» Á¤·ÄÇØ¼­ dp·Î Ç®¸é µÉ°Í°°À½
+//ë°›ì€ ë°°ì—´ì„ ì •ë ¬í•´ì„œ dpë¡œ í’€ë©´ ë ê²ƒê°™ìŒ
