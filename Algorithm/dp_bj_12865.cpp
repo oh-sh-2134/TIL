@@ -5,36 +5,37 @@
 using namespace std;
 
 
-#define nMAX 101
-#define wMAX 10001
+#define MAX 100001
 
-int arr[nMAX][nMAX];
-vector<pair<int,int>> v;
-pair<int,int>p;
-int dp[wMAX];
-int n;
+
+int dp[MAX][2];
+int maxval;
+int n,k;
 int v,w;
 
 void Input()
 {
-	cin >>n;
-	for(int i=0; i<=n;i++)
+	cin >>n>>k;
+	for(int i=0; i<n;i++)
 	{
-		cin >> p.first >> p.second;
-		v.push_back(p);
+		cin >> v >> w;
+		dp[v][1] = w;
 	}
-	sort(v.begin,v.end);
-
 }
 
 void solution()
 {
-	for(int i=0;i<=n;i++)
+	for(int i=1;i<=k;i++)
 	{
-		if(dp[v[i].first] == 0) dp[v[i].first] = dp[v[i-1].second];
-		dp[v[i].first] = max(max(dp[v[i].first],v[i].second),v[i].second+dp[n-v[i].first]);
+		for(int j = i-1; j>=i/2; j--)
+		{
+			dp[i][0] = max(dp[i-j][0] + dp[j][0], dp[i][0]);
+
+		}
+		dp[i][0] = max(dp[i][0],dp[i][1]);
+		maxval = max(maxval,dp[i][0]);
 	}
-	cout << dp[v[n].first];
+	cout << maxval;
 
 }
 
@@ -46,4 +47,5 @@ int main(void)
 
 //acmicpc.net/problem/12865
 //받은 배열을 정렬해서 dp로 풀면 될것같음
+
 //손코딩 후 다른사람들 코드를 참고 했는데 01 KnapSack 알고리즘 문제임 01 KnapSack알고리즘도 모르고 얼추 비슷하게 풀어서 관련내용 확인필요할듯.. 회사라 코드는  
