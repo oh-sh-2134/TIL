@@ -1,41 +1,36 @@
 #include<iostream>
-#include<vector>
 #include<algorithm>
-
 using namespace std;
-
 
 #define MAX 100001
 
 
-int dp[MAX][2];
+int dp[MAX];
 int maxval;
-int n,k;
-int v,w;
+int n, k;
+int v[101], w[101];
 
 void Input()
 {
-	cin >>n>>k;
-	for(int i=0; i<n;i++)
+	cin >> n >> k;
+	for (int i = 1; i <= n; i++)
 	{
-		cin >> v >> w;
-		dp[v][1] = w;
+		cin >> w[i] >> v[i];
 	}
 }
 
 void solution()
 {
-	for(int i=1;i<=k;i++)
+	for (int i = 1; i <=n; i++)
 	{
-		for(int j = i-1; j>=i/2; j--)
+		for (int j = k; j > 1 ; j--)
 		{
-			dp[i][0] = max(dp[i-j][0] + dp[j][0], dp[i][0]);
+			if (w[i] <= j)
+				dp[j] = max(dp[j], dp[j - w[i]] + v[i]);
 
 		}
-		dp[i][0] = max(dp[i][0],dp[i][1]);
-		maxval = max(maxval,dp[i][0]);
 	}
-	cout << maxval;
+	cout << dp[k];
 
 }
 
@@ -44,6 +39,7 @@ int main(void)
 	Input();
 	solution();
 }
+
 
 //acmicpc.net/problem/12865
 //받은 배열을 정렬해서 dp로 풀면 될것같음
