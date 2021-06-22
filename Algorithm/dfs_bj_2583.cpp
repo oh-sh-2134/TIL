@@ -7,8 +7,10 @@ using namespace std;
 bool arr[MAX][MAX];
 vector<int>sol;
 int n, m, k;
-int x1, y1, x2, y2;
-
+int x1, y1, x2, y2,c;
+int dx[4] = {0,0,1,-1};
+int dy[4] = {1,-1,0,0};
+	
 void paint()
 {
 	int px = x1 > x2 ? x1 : x2;
@@ -35,9 +37,19 @@ void Input()
 	}
 }
 
-void dfs()
+void dfs(int a, int b)
 {
-	
+	if (arr[a][b] == false) {
+		arr[a][b] = true;
+		++c;
+		for (int l = 0; l < 4; ++l) {
+			int x = dx[l] + a;
+			int y = dy[l] + b;
+			if (x >= 0 && y >= 0 && x < m && y < n) {
+				dfs(x, y);
+			}
+		}
+	}
 }
 
 void solution()
@@ -46,9 +58,14 @@ void solution()
 	{
 		for (int j = 0; j < n; j++)
 		{
-
+			c = 0;
+			dfs(i,j);
+			sol.push_back(c);
 		}
 	}
+	cout << sol.size() << "\n";
+	for (int i = 0; i < sol.size(); i++)
+		cout << sol[i]<< " ";
 }
 
 int main(void)
@@ -57,4 +74,4 @@ int main(void)
 	solution();
 }
 //https://www.acmicpc.net/problem/2583
-//¸ð´«Á¾ÀÌÀÇ ¸ðµç Á¡À» µ¹¾Æ´Ù´Ï¸ç »öÄ¥¾ÈµÈ ºÎºÐÀ» dfs µ¹·Á vector¿¡ ³Ö¾î Ã³¸®¿¹Á¤
+//ëª¨ëˆˆì¢…ì´ì˜ ëª¨ë“  ì ì„ ëŒì•„ë‹¤ë‹ˆë©° ìƒ‰ì¹ ì•ˆëœ ë¶€ë¶„ì„ dfs ëŒë ¤ vectorì— ë„£ì–´ ì²˜ë¦¬ì˜ˆì •
