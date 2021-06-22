@@ -45,7 +45,7 @@ void dfs(int a, int b)
 		for (int l = 0; l < 4; ++l) {
 			int x = dx[l] + a;
 			int y = dy[l] + b;
-			if (x >= 0 && y >= 0 && x < m && y < n) {
+			if (x > 0 && y > 0 && x <= m && y <= n) {
 				dfs(x, y);
 			}
 		}
