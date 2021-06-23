@@ -16,12 +16,12 @@ void paint()
 	int px = x1 > x2 ? x1 : x2;
 	int qx = x1 < x2 ? x1 : x2;
 	int py = y1 > y2 ? y1 : y2;
-	int qy = y2 < y2 ? y1 : y2;
+	int qy = y1 < y2 ? y1 : y2;
 	for (int i = qx; i < px; i++)
 	{
 		for (int j = qy; j < py; j++)
 		{
-			arr[j][i] = true;
+			arr[i][j] = true;
 		}
 	}
 
@@ -42,9 +42,9 @@ void dfs(int a, int b)
 	if (arr[a][b] == false) {
 		arr[a][b] = true;
 		++c;
-		for (int l = 0; l < 4; ++l) {
-			int x = dx[l] + a;
-			int y = dy[l] + b;
+		for (int i = 0; i < 4; i++) {
+			int x = dx[i] + a;
+			int y = dy[i] + b;
 			if (x > 0 && y > 0 && x <= m && y <= n) {
 				dfs(x, y);
 			}
