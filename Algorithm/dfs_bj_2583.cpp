@@ -7,16 +7,16 @@ using namespace std;
 bool arr[MAX][MAX];
 vector<int>sol;
 int n, m, k;
-int x1, y1, x2, y2,c;
-int dx[4] = {0,0,1,-1};
-int dy[4] = {1,-1,0,0};
-	
+int fx, fy, sx, sy, c;
+int dx[4] = { 0,0,1,-1 };
+int dy[4] = { 1,-1,0,0 };
+
 void paint()
 {
-	int px = x1 > x2 ? x1 : x2;
-	int qx = x1 < x2 ? x1 : x2;
-	int py = y1 > y2 ? y1 : y2;
-	int qy = y1 < y2 ? y1 : y2;
+	int px = fx > sx ? fx : sx;
+	int qx = fx < sx ? fx : sx;
+	int py = fy > sy ? fy : sy;
+	int qy = fy < sy ? fy : sy;
 	for (int i = qx; i < px; i++)
 	{
 		for (int j = qy; j < py; j++)
@@ -27,13 +27,22 @@ void paint()
 
 }
 
-void Input() 
+void Input()
 {
 	cin >> n >> m >> k;
 	for (int i = 0; i < k; i++)
 	{
-		cin >> x1 >> y1 >> x2 >> y2;
+		cin >> fx >> fy >> sx >> sy;
 		paint();
+	}
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < m; j++)
+		{
+			if (arr[j][i] == true) cout << 1;
+			else cout << 0;
+		}
+		cout << "\n";
 	}
 }
 
@@ -45,7 +54,7 @@ void dfs(int a, int b)
 		for (int i = 0; i < 4; i++) {
 			int x = dx[i] + a;
 			int y = dy[i] + b;
-			if (x > 0 && y > 0 && x <= m && y <= n) {
+			if (x >= 0 && y >= 0 && x < m && y < n) {
 				dfs(x, y);
 			}
 		}
@@ -54,18 +63,20 @@ void dfs(int a, int b)
 
 void solution()
 {
-	for (int i = 0; i < m; i++)
+	for (int i = 0; i < n; i++)
 	{
-		for (int j = 0; j < n; j++)
+		for (int j = 0; j < m; j++)
 		{
 			c = 0;
-			dfs(i,j);
-			sol.push_back(c);
+			dfs(i, j);
+			if (c != 0) 
+				sol.push_back(c);
 		}
 	}
 	cout << sol.size() << "\n";
 	for (int i = 0; i < sol.size(); i++)
-		cout << sol[i]<< " ";
+		cout << sol[i] << " ";
+	
 }
 
 int main(void)
