@@ -1,5 +1,6 @@
 #include<iostream>
 #include<vector>
+#include<algorithm>
 #define MAX 100
 
 using namespace std;
@@ -35,15 +36,6 @@ void Input()
 		cin >> fx >> fy >> sx >> sy;
 		paint();
 	}
-	for (int i = 0; i < n; i++)
-	{
-		for (int j = 0; j < m; j++)
-		{
-			if (arr[j][i] == true) cout << 1;
-			else cout << 0;
-		}
-		cout << "\n";
-	}
 }
 
 void dfs(int a, int b)
@@ -59,13 +51,14 @@ void dfs(int a, int b)
 			}
 		}
 	}
+	return;
 }
 
 void solution()
 {
-	for (int i = 0; i < n; i++)
+	for (int i = 0; i < m; i++)
 	{
-		for (int j = 0; j < m; j++)
+		for (int j = 0; j < n; j++)
 		{
 			c = 0;
 			dfs(i, j);
@@ -74,6 +67,7 @@ void solution()
 		}
 	}
 	cout << sol.size() << "\n";
+	sort(sol.begin(), sol.end());
 	for (int i = 0; i < sol.size(); i++)
 		cout << sol[i] << " ";
 	
@@ -86,3 +80,4 @@ int main(void)
 }
 //https://www.acmicpc.net/problem/2583
 //모눈종이의 모든 점을 돌아다니며 색칠안된 부분을 dfs 돌려 vector에 넣어 처리예정
+//x축 y축이 헷갈려서 오탑처리에 대해 오래 고민함..
