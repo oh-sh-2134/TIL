@@ -28,7 +28,7 @@ void dfs(int a, int b)
 		{
 			int y = a + dy[i];
 			int x = b + dx[i];
-			if (x < 0 && y < 0 && x >= m && y >= n) continue;
+			if (x < 0 || y < 0 || x >= n || y >= m) continue;
 			dfs(y, x);
 		}
 	}
