@@ -4,16 +4,16 @@
 
 #define Cheese 1
 #define Air 0
-#define MeltedAir 5
+#define MeltedAir -1
 
 using namespace std;
 
 
 int dx[4] = { 0,0,1,-1 };
 int dy[4] = { 1,-1,0,0 };
-int m, n,cnt;
+int m, n, cnt;
 int arr[MAX][MAX];
-int cntfield[MAX][MAX];
+bool visted[MAX][MAX];
 
 
 void Input()
@@ -35,8 +35,16 @@ bool CheesCheck()
 	{
 		for (int j = 0; j < m; j++)
 		{
-			if(arr[i][j] == 1) flag = true;
-			cntfield[i][j] = 0;
+
+			if (arr[i][j] >= Cheese)
+			{
+				flag = true;
+				arr[i][j] = Cheese;
+			}
+			else 
+				arr[i][j] = Air;
+
+			visted[i][j] = false;
 		}
 	}
 	return flag;
@@ -44,38 +52,39 @@ bool CheesCheck()
 
 void Airing()
 {
-	queue<pair<int,int>>q;
-	q.push(make_pair(0,0));
+	queue<pair<int, int>>q;
+	q.push(make_pair(0, 0));
 	arr[0][0] = MeltedAir;
 
-	while(!q.empty())
+	while (!q.empty())
 	{
 		int y = q.front().first;
 		int x = q.front().second;
-		for(int i=0;i<4;i++)
+		for (int i = 0; i < 4; i++)
 		{
 			int ny = y + dy[i];
 			int nx = x + dx[i];
-		
+
 			if (x < 0 || y < 0 || x >= m || y >= n) continue;
-			if (arr[ny][nx] == 0 ) arr[ny][nx] = MeltedAir;
+			if (arr[ny][nx] == 0) arr[ny][nx] = MeltedAir;
 
 		}
 	}
-		
+
 }
 
 void dfs(int a, int b)
 {
-	if (arr[a][b] == 1)
+	if (arr[a][b] >= Cheese && !visted[a][b])
 	{
-		arr[a][b] = 2;
-		for (int i = 0; i < 8; i++)
+		visted[a][b] = true;
+		for (int i = 0; i < 4; i++)
 		{
 			int y = a + dy[i];
 			int x = b + dx[i];
 			if (x < 0 || y < 0 || x >= m || y >= n) continue;
-			dfs(y, x);
+			if (arr[y][x] == MeltedAir) arr[a][b]++;
+			if (arr[y][x] >=Cheese) dfs(y, x);
 		}
 	}
 
@@ -83,27 +92,22 @@ void dfs(int a, int b)
 
 void solution()
 {
-	while(CheesCheck())
+	int sol = 0;
+	while (CheesCheck())
 	{
+		sol++;
 		Airing();
-
-
-
-	}
-
-	for (int i = 0; i < m; i++)
-	{
-		for (int j = 0; j < n; j++)
+		for (int i = 0; i < n; i++)
 		{
-			if (arr[i][j] == 1)
+			for (int j = 0; j < m; j++)
 			{
-				dfs(i, j);
-				cnt++;	
+				if (arr[i][j] >= Cheese && !visted[i][j])
+					dfs(i, j);
 			}
 		}
-	}
-	cout << cnt;
 
+	}
+	cout << sol;
 }
 
 int main(void)
@@ -113,5 +117,6 @@ int main(void)
 }
 
 //https://www.acmicpc.net/problem/2638
-//ÀÌÀü Ä¡Áî ¹®Á¦¶û Â÷ÀÌÁ¡Àº °ø±â¿¡ ´ê´Â ¸éÀÌ 2°³ ÀÌ»óÀÏ¶§ ³ì´Â´Ù´Â Á¡
-//ÇöÁ¦ ³ì´Â °ø±â¸¦ Á¤ÀÇÇÏ´Â ÇÔ¼ö, Ä¡Áî°¡ Á¸ÀçÇÏ´ÂÁö È®ÀÎÇÏ´Â ÇÔ¼ö ¸¸µë dfs¿Í solutionÇÔ¼ö ¼öÁ¤ÇØ¾ßÇÔ
+//ì´ì „ ì¹˜ì¦ˆ ë¬¸ì œëž‘ ì°¨ì´ì ì€ ê³µê¸°ì— ë‹¿ëŠ” ë©´ì´ 2ê°œ ì´ìƒì¼ë•Œ ë…¹ëŠ”ë‹¤ëŠ” ì 
+//í˜„ì œ ë…¹ëŠ” ê³µê¸°ë¥¼ ì •ì˜í•˜ëŠ” í•¨ìˆ˜, ì¹˜ì¦ˆê°€ ì¡´ìž¬í•˜ëŠ”ì§€ í™•ì¸í•˜ëŠ” í•¨ìˆ˜ ë§Œë“¬ dfsì™€ solutioní•¨ìˆ˜ ìˆ˜ì •í•´ì•¼í•¨
+//ì‹œê°„ì´ˆê³¼ ë‚˜ì˜´ ì›ì¸ íŒŒì•…í•„ìš”
