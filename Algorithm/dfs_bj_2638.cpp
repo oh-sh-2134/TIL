@@ -5,7 +5,7 @@
 #define Cheese 1
 #define Air 0
 #define MeltedAir -1
-
+#define MeltCheese 3
 using namespace std;
 
 
@@ -35,16 +35,17 @@ bool CheesCheck()
 	{
 		for (int j = 0; j < m; j++)
 		{
-
-			if (arr[i][j] >= Cheese)
+			if (arr[i][j] < Cheese || arr[i][j] >= MeltCheese)
+			{
+				arr[i][j] = Air;
+				visted[i][j] = false;
+			}
+			else 
 			{
 				flag = true;
 				arr[i][j] = Cheese;
+				visted[i][j] = false;
 			}
-			else 
-				arr[i][j] = Air;
-
-			visted[i][j] = false;
 		}
 	}
 	return flag;
@@ -60,13 +61,20 @@ void Airing()
 	{
 		int y = q.front().first;
 		int x = q.front().second;
+		q.pop();
 		for (int i = 0; i < 4; i++)
 		{
 			int ny = y + dy[i];
 			int nx = x + dx[i];
 
 			if (x < 0 || y < 0 || x >= m || y >= n) continue;
-			if (arr[ny][nx] == 0) arr[ny][nx] = MeltedAir;
+			if (arr[ny][nx] == Air && !visted[ny][nx])
+			{
+
+				visted[ny][nx] = true;
+				arr[ny][nx] = MeltedAir;
+				q.push(make_pair(ny,nx));
+			}
 
 		}
 	}
@@ -84,11 +92,13 @@ void dfs(int a, int b)
 			int x = b + dx[i];
 			if (x < 0 || y < 0 || x >= m || y >= n) continue;
 			if (arr[y][x] == MeltedAir) arr[a][b]++;
-			if (arr[y][x] >=Cheese) dfs(y, x);
+			if (arr[y][x] >=Cheese) 
+				dfs(y, x);
 		}
 	}
 
 }
+
 
 void solution()
 {
@@ -101,7 +111,7 @@ void solution()
 		{
 			for (int j = 0; j < m; j++)
 			{
-				if (arr[i][j] >= Cheese && !visted[i][j])
+				if (arr[i][j] == Cheese && !visted[i][j])
 					dfs(i, j);
 			}
 		}
