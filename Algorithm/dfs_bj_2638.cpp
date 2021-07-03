@@ -50,14 +50,14 @@ void Airing(int a, int b)
 
 				visited[ny][nx] = true;
 				arr[ny][nx] = MeltedAir;
-				q.push(make_pair(ny,nx));
+				q.push(make_pair(ny, nx));
 			}
 
 		}
 	}
 
 }
-
+/*
 bool CheesCheck()
 {
 	bool flag = false;
@@ -69,9 +69,9 @@ bool CheesCheck()
 			{
 				visited[i][j] = false;
 				arr[i][j] = MeltedAir;
-				Airing(i,j);
+				Airing(i, j);
 			}
-			else if (arr[i][j] >=Cheese)
+			else if (arr[i][j] >= Cheese)
 			{
 				flag = true;
 				arr[i][j] = Cheese;
@@ -81,7 +81,23 @@ bool CheesCheck()
 	}
 	return flag;
 }
-
+*/
+bool CheesCheck()
+{
+	bool flag = false;
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < m; j++)
+		{
+			if (arr[i][j] == Cheese)
+			{
+				flag = true;
+				return flag;
+			}
+		}
+	}
+	return flag;
+}
 
 
 void dfs(int a, int b)
@@ -95,7 +111,7 @@ void dfs(int a, int b)
 			int x = b + dx[i];
 			if (x < 0 || y < 0 || x >= m || y >= n) continue;
 			if (arr[y][x] == MeltedAir) arr[a][b]++;
-			if (arr[y][x] >=Cheese && !visited[y][x]) 
+			if (arr[y][x] >= Cheese && !visited[y][x])
 				dfs(y, x);
 		}
 	}
@@ -106,20 +122,27 @@ void bfs(int a, int b)
 {
 	visited[a][b] = true;
 	queue<pair<int, int>>q;
+	queue<pair<int, int>>melt_q;
 	q.push(make_pair(a, b));
-	while(!q.empty())
+	while (!q.empty())
 	{
 		int y = q.front().first;
 		int x = q.front().second;
 		q.pop();
-		for(int i=0;i<4;i++)
+		for (int i = 0; i < 4; i++)
 		{
 			if (x < 0 || y < 0 || x >= m || y >= n) continue;
-			if (arr[y][x] == MeltedAir) arr[a][b]++;
-			if (arr[y][x] >=Cheese && !visited[y][x])
+			if (arr[y][x] == MeltedAir)
+			{
+				arr[a][b]++;
+				if (arr[a][b] >= MeltCheese)
+					Airing(a, b);
+
+			}
+			if (arr[y][x] >= Cheese && !visited[y][x])
 			{
 				visited[y][x] = true;
-				q.push(make_pair(y,x));
+				q.push(make_pair(y, x));
 			}
 		}
 	}
@@ -130,7 +153,7 @@ void bfs(int a, int b)
 void solution()
 {
 	int sol = 0;
-	Airing(0,0);
+	Airing(0, 0);
 	while (CheesCheck())
 	{
 		sol++;
@@ -139,7 +162,7 @@ void solution()
 			for (int j = 0; j < m; j++)
 			{
 				if (arr[i][j] == Cheese && !visited[i][j])
-					dfs(i, j);
+					bfs(i, j);
 			}
 		}
 
@@ -154,9 +177,11 @@ int main(void)
 }
 
 
+
 //https://www.acmicpc.net/problem/2638
 //이전 치즈 문제랑 차이점은 공기에 닿는 면이 2개 이상일때 녹는다는 점
 //현제 녹는 공기를 정의하는 함수, 치즈가 존재하는지 확인하는 함수 만듬 dfs와 solution함수 수정해야함
 //시간초과 나옴 원인 파악필요
 //20210701 에어링을 최초 1회후 녹은 치즈 기준으로만 돌리면 될 것 같음, 오답처리되는 원인을 찾아야함
 //20210702 고민했었던 방법대로 했지만 9퍼에서 시간초과 되어 bfs도 만들어봤는데 마찬가지 연산 횟수를 줄이는 방법을 생각해야함
+//20210703 치즈 체크에서 연산이 너무 많은것같음 , 코드수정 , 치즈위치 visited 초기화 
