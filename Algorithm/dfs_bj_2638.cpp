@@ -1,6 +1,6 @@
 #include<iostream>
 #include<queue>
-#define MAX 100
+#define MAX 101
 
 #define Cheese 1
 #define Air 0
@@ -45,7 +45,7 @@ void Airing(int a, int b)
 			int ny = y + dy[i];
 			int nx = x + dx[i];
 
-			if (x < 0 || y < 0 || x >= m || y >= n) continue;
+			if (nx < 0 || ny < 0 || nx >= m || ny >= n) continue;
 			if (arr[ny][nx] == Air && !visited[ny][nx])
 			{
 
@@ -74,25 +74,6 @@ bool CheesCheck()
 		}
 	}
 	return flag;
-}
-
-
-void dfs(int a, int b)
-{
-	if (arr[a][b] >= Cheese && !visited[a][b])
-	{
-		visited[a][b] = true;
-		for (int i = 0; i < 4; i++)
-		{
-			int y = a + dy[i];
-			int x = b + dx[i];
-			if (x < 0 || y < 0 || x >= m || y >= n) continue;
-			if (arr[y][x] == MeltedAir) arr[a][b]++;
-			if (arr[y][x] >= Cheese && !visited[y][x])
-				dfs(y, x);
-		}
-	}
-
 }
 
 void bfs(int a, int b)
@@ -137,13 +118,13 @@ void MeltingCheese()
 	mcnt = melt_q.size();
 	vcnt = non_melt_q.size();
 
-	for(int i=0; i<mcnt; i++)
+	while(!melt_q.empty())
 	{
 		Airing(melt_q.front().first, melt_q.front().second);
 		melt_q.pop();
 	}
 
-	for(int i = 0; i< vcnt; i++)
+	while(!non_melt_q.empty())
 	{
 		arr[non_melt_q.front().first][non_melt_q.front().second] = Cheese;
 		visited[non_melt_q.front().first][non_melt_q.front().second] = false;
@@ -188,3 +169,4 @@ int main(void)
 //20210702 고민했었던 방법대로 했지만 9퍼에서 시간초과 되어 bfs도 만들어봤는데 마찬가지 연산 횟수를 줄이는 방법을 생각해야함
 //20210703 치즈 체크에서 연산이 너무 많은것같음 , 코드수정 , 치즈위치 visited 초기화 
 //20210705 바운더리 에러남 queue 초기화 문제인듯한데 확인이 필요할듯
+//20210706 Airing()에서 범위체크하는 부분 문제... 확인
