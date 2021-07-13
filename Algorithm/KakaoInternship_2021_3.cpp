@@ -46,7 +46,6 @@ int main(void) {
 #include <iostream>
 #include <stack>
 using namespace std;
-
 string solution(int n, int k, vector<string> cmd) {
 	string answer = "";
 	stack<int> DelNums;
@@ -54,32 +53,51 @@ string solution(int n, int k, vector<string> cmd) {
 	int p = k;
 	for (int i = 0; i < cmd.size(); i++) {
 		if (cmd[i][0] == 'U') {
-			p -= (cmd[i][2] - '0');
-			while (!Table[p]) {
-				p -= 1;
+			int cnt = stoi(cmd[i].substr(2));
+			while(cnt--){
+				if(Table[p]){
+					p--;
+				}
+				else {
+					cnt++;
+					p--;
+				}
+
 			}
 		}
 		else if (cmd[i][0] == 'D') {
-			p += (cmd[i][2] - '0');
-			while (!Table[p]) {
-				p += 1;
+			int cnt = stoi(cmd[i].substr(2));
+			while(cnt--){
+				if(Table[p]){
+					p++;
+				}
+				else{
+					cnt++;
+					p++;
+				}
+
 			}
 		}
 		if (cmd[i][0] == 'C') {
 			Table[p] = 0;
 			DelNums.push(p);
-			bool flag = false;
-			while (!Table[p] && p < Table.size()) {
-				if (flag) {
-					p -= 1;
-				}
-				else {
-					p += 1;
-					if (p == Table.size()) {
-						p = DelNums.top();
-						flag = true;
-					}
-				}
+
+			
+			int end = n-1;
+			while(!Table[end])
+			{
+				end--;
+			}
+			if(p == end)
+			{
+				while(!Table[p])
+					p--;
+			}
+			else 
+				p++;
+			while(!Table[p])
+			{
+				p++;
 			}
 			
 		}
@@ -96,10 +114,25 @@ string solution(int n, int k, vector<string> cmd) {
 	}
 	return answer;
 }
-
 int main(void) {
-	vector<string> s = { "D 2","C","U 3","C","D 4","C","U 2","Z","Z","U 1","C" };
-	cout << solution(8, 2, s);
+	//vector<string> t1 = { "D 2","C","U 3","C","D 4","C","U 2","Z","Z","U 1","C" };
+	//vector<string> t2 = {"D 2", "C", "U 3", "C", "D 4", "C", "U 2", "Z", "Z", "U 1", "C"};
+	vector<string> t2;
+	t2.push_back("D 2");
+	t2.push_back( "C");
+	t2.push_back("U 3");
+	t2.push_back("C");
+	t2.push_back ("D 4");
+	t2.push_back("C");
+	t2.push_back("U 2");
+	t2.push_back("Z");
+	t2.push_back("Z");
+	t2.push_back("Z");
+	t2.push_back("U 1");
+	t2.push_back("C");
+
+	//cout << solution(8, 2, t1);
+	cout << solution(8, 2, t2);
 }
 */
 //분석필요
