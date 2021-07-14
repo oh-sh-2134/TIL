@@ -78,21 +78,25 @@ string solution(int n, int k, vector<string> cmd) {
 
 			}
 		}
-		if (cmd[i][0] == 'C') {
-			Table[p] = 0;
-			DelNums.push(p);
+		else if (cmd[i][0] == 'C') {
 
 			
 			int end = n-1;
+			bool endflag = false;
 			while(!Table[end])
 			{
 				end--;
 			}
 			if(p == end)
 			{
+				endflag = true;
 				while(!Table[p])
 					p--;
 			}
+			Table[p] = 0;
+			DelNums.push(p);
+			if(endflag)
+				p--;
 			else 
 				p++;
 			while(!Table[p])
@@ -100,8 +104,9 @@ string solution(int n, int k, vector<string> cmd) {
 				p++;
 			}
 			
+			
 		}
-		if (cmd[i][0] == 'Z') {
+		else if (cmd[i][0] == 'Z') {
 			Table[DelNums.top()] = 1;
 			DelNums.pop();
 		}
@@ -136,3 +141,4 @@ int main(void) {
 }
 */
 //분석필요
+//테케 두개다 통과했지만 실패 'C'에서 마지막 부분 처리하는 걸 link되어 있는 container를 사용하지 않으면 못푸는 것 같음
