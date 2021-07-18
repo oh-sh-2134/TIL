@@ -1,67 +1,76 @@
 #include<iostream>
 #include<vector>
 #include<queue>
+#include<algorithm>
+#include<string.h>
 #define MAX 101
 
 using namespace std;
 
 int n, m;
-vector<vector<int>> node;
-bool visited[MAX];
-int dp[MAX];
-int connect;
 
-void MakeConnect(int a, int b) {
-	node[a].push_back(b);
-	node[b].push_back(a);
-}
+bool node[MAX][MAX];
+int visited[MAX];
+int temp[MAX];
+
+
+
 void Input() {
 	cin >> n >> m;
 	int a, b;
-	for (int i = 1; i <= n; i++)
+	for (int i = 0; i < m; i++)
 	{
 		cin >> a >> b;
-		MakeConnect(a, b);
+		node[a][b] = true;
+		node[b][a] = true;
 	}
 }
 
-void bfs(int n) {
-	visited[n] = true;
+void bfs(int num) {
+	visited[num] = 0;
 	queue<int> q;
-	q.push(n);
-	int cnt = q.size();
-	while (cnt--) {
+	q.push(num);
+	while (!q.empty()) {
 		int current = q.front();
 		q.pop();
-		for (int i = 0; i < node[current].size(); i++)
+		for (int i = 1; i <= n; i++)
 		{
-			int next = node[current][i];
-			if (!visited[next])
+			if (visited[i] == -1 && node[current][i])
 			{
-				q.push(next);
-				visited[next] = true;
-				dp[next] = dp[current] + 1;
+				visited[i] = visited[current] + 1;
+				q.push(i);
 			}
 		}
 	}
-
-	for (int i = 0; i < node[n].size(); i++)
-	{
-		connect += dp[node[n][i]];
+	for (int i = 1; i <= n; i++) {
+		if (visited[i] > 0)
+		{
+			temp[num] += visited[i];
+		}
 	}
 }
 
 void solution() {
-	for (int i = 1; i < n; i++)
+	for (int i = 1; i <= n; i++)
 	{
-		memset(visited, visited[n], false);
-		memset(dp, dp[n], false);
+		memset(visited, -1, sizeof(visited));
 		bfs(i);
 	}
+	int min = temp[1];
+	int sol = 1;
+	for (int i = 2; i <= n; i++) {
+		if (min > temp[i]) {
+			min = temp[i];
+			sol = i;
+		}
+	}
+	cout << sol;
 }
 
-void solution() 
+int main(void) 
 {
 	Input();
 	solution();
 }
+//https://www.acmicpc.net/problem/1389
+//BFS를 사용하여서 풀었지만 케빈베이컨 알고리즘을 이용하여 한번더 풀어볼 것.
