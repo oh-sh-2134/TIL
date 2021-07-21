@@ -4,22 +4,10 @@
 using namespace std;
 
 int node[MAX][MAX];
-bool visted[MAX];
+bool visited[MAX];
+int dist[MAX];
 int n, m;
 int a, b;
-
-void Input() {
-	
-	cin >> a >> b >> n >> m;
-	int x, y;
-	for (int i = 0; i < m; i++)
-	{
-		cin >> a >> b;
-		node[x][y] = 1;
-		node[y][x] = 1;
-	}
-}
-
 
 void MakeTable() {
 	for (int i = 1; i <= n; i++)
@@ -32,17 +20,63 @@ void MakeTable() {
 	}
 }
 
-void dihkstra(int n) {
+void Input() {
+	
+	cin >> a >> b >> n >> m;
+	int x, y;
+	MakeTable();
+	for (int i = 0; i < m; i++)
+	{
+		cin >> x >> y;
+		node[x][y] = 1;
+		node[y][x] = 1;
+	}
+}
+
+
+int GetSmallDist(){
+	int nodenum = 0;
+	int min = INF;
+	for(int i=1;i<=n;i++){
+		if(min> dist[i] && !visited[i])
+		{
+			min = dist[i];
+			nodenum = i;
+		}
+	}
+	return nodenum;
+}
+
+int dihkstra(int n) {
 	int sum = 0;
 	for (int i = 1; i <= n; i++)
 	{
-		for (int j = 1; j <= n; j++)
+		dist[i] = node[n][i];
+	}
+	visited[n] = true;
+	for(int i=1; i<=n-2; i++)
+	{
+		int current = GetSmallDist();
+		visited[current] = true;
+		for(int j = 1;j<=n ; j++)
 		{
-			
+			if(!visited[j])
+			{
+				if(dist[j] > node[current][j] + dist[current])
+					dist[j] = node[current][j] + dist[current];
+			}
 		}
 	}
+	return node[a][b];
+}
 
+int main(void){
+	int sol;
+	Input();
+	sol = dihkstra(a);
+	cout << sol;
 }
 
 //https://www.acmicpc.net/problem/14496
-//´ÙÀÍ½ºÆ®¶ó ¾Ë°í¸®Áò °øºÎ ÇÊ¿äÇÔ
+//ë‹¤ìµìŠ¤íŠ¸ë¼ ì•Œê³ ë¦¬ì¦˜ ê³µë¶€ í•„ìš”í•¨
+//ë‹¤ìµìŠ¤íŠ¸ë¼ ì•Œê³ ë¦¬ì¦˜ìœ¼ë¡œ 1
