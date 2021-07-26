@@ -2,7 +2,7 @@
 #include <vector>
 #include <algorithm>
 #include <queue>
-#define INF 1000000000
+#define INF 987654321
 using namespace std;
  
 vector<pair<int, int> > list[1001];
@@ -13,18 +13,21 @@ void dijkstra() {
     d[start] = 0;
     priority_queue<pair<int, int> > q;
     q.push({ start, 0 });
-    while (!q.empty()) {
+    while (!q.empty()) 
+    {
         int x = q.top().first;
         int dis = -q.top().second;
         q.pop();
  
         if (d[x] < dis) continue;
  
-        for (int i = 0; i < list[x].size(); i++) {
+        for (int i = 0; i < list[x].size(); i++) 
+        {
             int next = list[x][i].first;
             int nextdis = dis + list[x][i].second;
  
-            if (d[next] > nextdis) {
+            if (d[next] > nextdis) 
+            {
                 d[next] = nextdis;
                 q.push({ next, -nextdis });
             }
@@ -35,7 +38,8 @@ void dijkstra() {
 }
  
 void init() {
-    for (int i = 1; i <= N; i++) {
+    for (int i = 1; i <= N; i++) 
+    {
         d[i] = INF;
     }
 }
@@ -45,7 +49,8 @@ void input() {
     cin >> start >> des >> N >> M;
     init();
  
-    while (M--) {
+    while (M--) 
+    {
         cin >> u >> v;
         list[u].push_back({ v,1 });
         list[v].push_back({ u,1 });
