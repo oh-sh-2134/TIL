@@ -58,4 +58,4 @@ int main(){
 	cout << max;
 }
 //https://www.acmicpc.net/problem/1743
-//bfs·Î Ç®¾úÀ½
+//bfsë¡œ í’€ì—ˆìŒ
