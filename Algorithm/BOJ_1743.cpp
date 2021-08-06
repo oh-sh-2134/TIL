@@ -58,4 +58,4 @@ int main(){
 	cout << max;
 }
 //https://www.acmicpc.net/problem/1743
-//bfs로 풀었음
+//bfs로 풀었음 / 난이도★
