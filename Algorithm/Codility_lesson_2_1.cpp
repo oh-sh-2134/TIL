@@ -30,16 +30,16 @@ vector<int> solution(vector<int> &A, int K) {
 int main(void)
 {
 	vector<int> v;
-	//v.push_back(1);
-	//v.push_back(2);
-	//v.push_back(3);
-	//v.push_back(4);
+	v.push_back(1);
+	v.push_back(2);
+	v.push_back(3);
+	v.push_back(4);
 
 	solution(v, 3);
 }
 
 //https://app.codility.com/demo/results/trainingT5GDMG-99V/
-//º¤ÅÍ°¡ ºñ¾î ÀÖ´Â ÄÉÀÌ½º°¡ ºüÁü
+//ë²¡í„°ê°€ ë¹„ì–´ ìˆëŠ” ì¼€ì´ìŠ¤ê°€ ë¹ ì§
 
 //https://app.codility.com/demo/results/trainingQ84FK9-BXT/
-//100Á¡ È®ÀÎ
+//100ì  í™•ì¸
