@@ -45,15 +45,15 @@ int main(void)
 }
 
 //https://app.codility.com/demo/results/trainingX5C2ZH-DH7/
-// big 1, big 2¿¡¼­ Performance 50% -> Total 77%
-// setÀÇ ½Ã°£ º¹Àâµµ -> °Ë»ö O(logn) , »ğÀÔ »èÁ¦ O(logn + a)
-// ¹®Á¦¿¡¼­´Â O(N**2)·Î º¸°í ÀÖÀ½
+// big 1, big 2ì—ì„œ Performance 50% -> Total 77%
+// setì˜ ì‹œê°„ ë³µì¡ë„ -> ê²€ìƒ‰ O(logn) , ì‚½ì… ì‚­ì œ O(logn + a)
+// ë¬¸ì œì—ì„œëŠ” O(N**2)ë¡œ ë³´ê³  ìˆìŒ
 
 //https://app.codility.com/demo/results/training34KPE2-QM2/
-// unordered_set»ç¿ëÀ¸·Î Performance 100 -> Total 100%
-// unordered_setÀÇ ½Ã°£ º¹Àâµµ -> O(1) ~ O(N)
-// ¹®Á¦¿¡¼­´Â O(N) or O(N*log(N)) ·Î º¸°í ÀÖÀ½
-// unordered_set»ç¿ëÀº C++ 11 ÀÌ»ó¿¡¼­ »ç¿ë °¡´É
+// unordered_setì‚¬ìš©ìœ¼ë¡œ Performance 100 -> Total 100%
+// unordered_setì˜ ì‹œê°„ ë³µì¡ë„ -> O(1) ~ O(N)
+// ë¬¸ì œì—ì„œëŠ” O(N) or O(N*log(N)) ë¡œ ë³´ê³  ìˆìŒ
+// unordered_setì‚¬ìš©ì€ C++ 11 ì´ìƒì—ì„œ ì‚¬ìš© ê°€ëŠ¥
 
 //https://hydroponicglass.tistory.com/171
-//Âü°í
+//set and unordered_set ì°¸ê³ 
