@@ -15,9 +15,9 @@ bool bitmask(int state, int idx)
 {
 	return(1 << trapidx[idx]) & state;
 }
-// roads_rows´Â 2Â÷¿ø ¹è¿­ roadsÀÇ Çà ±æÀÌ, roads_cols´Â 2Â÷¿ø ¹è¿­ roadsÀÇ ¿­ ±æÀÌÀÔ´Ï´Ù.
-// traps_lenÀº ¹è¿­ trapsÀÇ ±æÀÌÀÔ´Ï´Ù.
-int solution(int n, int start, int end, vector<vector<int>> roads, size_t roads_rows, size_t roads_cols, int traps[], size_t traps_len) {
+// roads_rowsëŠ” 2ì°¨ì› ë°°ì—´ roadsì˜ í–‰ ê¸¸ì´, roads_colsëŠ” 2ì°¨ì› ë°°ì—´ roadsì˜ ì—´ ê¸¸ì´ì…ë‹ˆë‹¤.
+// traps_lenì€ ë°°ì—´ trapsì˜ ê¸¸ì´ì…ë‹ˆë‹¤.
+int solution(int n, int start, int end, vector<vector<int>> roads, size_t roads_rows, size_t roads_cols, vector<int> traps, size_t traps_len) {
 	int answer = 0;
 	for (auto road : roads)
 	{
@@ -27,8 +27,52 @@ int solution(int n, int start, int end, vector<vector<int>> roads, size_t roads_
 		adj[u].push_back(make_pair(v,val));
 		adjrev[v].push_back(make_pair(u, val));
 	}
+	for (int i = 0; i < n; i++)
+		memset(dp[i], *dp[i] + 1024, 987654321);
 	memset(trapidx, *trapidx + n, -1);
-	for(int i = 0; i< traps.size(); trapidx)
+	for (int i = 0; i < traps.size(); trapidx) trapidx[traps[i]] = i;
+	priority_queue<tuple<int, int, int>, vector<tuple<int, int, int>>, greater<tuple<int, int, int>>> q;
+	q.push({ dp[start][0], start, 0 });
+	while (!q.empty()) {
+		int val, idx, state;
+		tie(val, idx, state) = q.top();
+		q.pop();
+		if (idx == end) return val;
+		if (dp[idx][state] != val) continue;
+		for (auto p : adj[idx]) 
+		{ 
+			int nxt = p.first;
+			int dist = p.second;
+			int rev = 0;
+			if (trapidx[idx] != -1 && bitmask(state, idx)) rev ^= 1; 
+			if (trapidx[nxt] != -1 && bitmask(state, nxt)) rev ^= 1; 
+			if (rev) continue; 
+			int nxt_state = state;
+			if (trapidx[nxt] != -1) nxt_state ^= (1 << trapidx[nxt]);
+			if (dp[nxt][nxt_state] > dist + val) 
+			{
+				dp[nxt][nxt_state] = dist + val;
+				q.push({ dp[nxt][nxt_state],nxt,nxt_state });
+			}
+		}
 
-	return answer;
+		for (auto p : adjrev[idx]) { 
+			int nxt = p.first;
+			int dist = p.second;
+			int rev = 0;
+			if (trapidx[idx] != -1 && bitmask(state, idx)) rev ^= 1;
+			if (trapidx[nxt] != -1 && bitmask(state, nxt)) rev ^= 1;
+			if (!rev) continue; 
+			int nxt_state = state;
+			if (trapidx[nxt] != -1) nxt_state ^= (1 << trapidx[nxt]);
+			if (dp[nxt][nxt_state] > dist + val) {
+				dp[nxt][nxt_state] = dist + val;
+				q.push({ dp[nxt][nxt_state],nxt,nxt_state });
+			}
+		}
+	}
+	return -1; // unreachable
 }
+
+//https://github.com/encrypted-def/kakao-blind-recruitment/blob/master/2021-internship/Q4.cpp#L35
+//ê³µë¶€ ìë£Œ
