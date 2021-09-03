@@ -31,5 +31,21 @@ vector<int> solution(vector<string> info, vector<string> query) {
 			}
 		}
 	}
+   	 for(int i = 0; i < 108; i++)
+ 	       sort(L[i].begin(), L[i].end());
+    	    vector<int> answer;
+    	for(auto q : query){
+       	 int v[4];
+       	 int idx1 = 0, idx2 = q.find(" ", idx1);
+      	  for(int i = 0; i < 4; i++){
+            string cond = q.substr(idx1, idx2 - idx1);
+            idx1 = idx2+5;
+            idx2 = q.find(" ", idx1);
+            v[i] = find(l[i], l[i]+4, cond) - l[i];
+        }
+        int target = stoi(q.substr(idx1 - 4, 10));
+        int idx = v[0]*27 + v[1]*9 + v[2]*3 + v[3];
+        answer.push_back(L[idx].end() - lower_bound(L[idx].begin(), L[idx].end(), target));
+    }	
 	return answer;
 }
