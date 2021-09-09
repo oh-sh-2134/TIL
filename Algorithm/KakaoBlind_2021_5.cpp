@@ -21,25 +21,25 @@ string solution(string play_time, string adv_time, vector<string> logs) {
 	{
 		int f = parsing(s.substr(0, 8));
 		int e = parsing(s.substr(9, 8));
-		for (int i = f; i <= e; i++)
+		for (int i = f; i < e; i++)
 		{
 			sec[i]++;
 		}
 	}
 
-	for (int i = 0; i <= at; i++)
+	for (int i = 0; i < at; i++)
 	{
 		maxsum += sec[i];
 	}
 	maxidx = 0;
 	sum = maxsum;
-	for (int i = at; i <= pt-at; i++)
+	for (int i = at; i < pt; i++)
 	{
-		sum += sec[i + 1] - sec[i - 1];
+		sum += sec[i] - sec[i - at];
 		if (maxsum < sum)
 		{
 			maxsum = sum;
-			maxidx = i;
+			maxidx = i-at+1;
 		}
 	}
 	int num = 0;
@@ -48,9 +48,10 @@ string solution(string play_time, string adv_time, vector<string> logs) {
 	{
 		num = maxidx / i;
 		maxidx -= num * i;
-		if (num < 10)
+		if(num <10)
 			answer += "0";
 		answer += to_string(num);
+
 		if (i != 1)
 			answer += ":";
 	}
@@ -67,3 +68,7 @@ int main(void)
 	cout << solution(pt, at, logs);
 
 }
+
+//https://www.youtube.com/watch?v=Xx5bk_EP8tQ&list=PL6YHvWRMtz7DhuPHdUZ0WLB5fNO729mbm&index=5
+//prefix sum을 이용해서 영상의 총시간을 시청자들의 시청시간에 해당하는 범위에 +1을 해주고 광고시간을 동영상의 시간을 처음부터 비교하여 가장 큰 값을 가지는 범위의 시작값이 광고의 삽입위치가 됨
+//모든 시간을 초단위로 환산하여 계산 prefix sum 
