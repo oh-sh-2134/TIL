@@ -1,20 +1,49 @@
-#include <iostream>
+#include<iostream>
+#include<vector>
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<math.h>
+#include<algorithm>
 
+#define MAX 987654321
 using namespace std;
+int N, W[16][16];
 
-int main() {
-	int X;
-	cin >> X;
-	int ans = 0;
-	while (X > 0)
-	{
-		if (X & 1)
-			ans++;
+int dp[16][1 << 16];
 
-		X >>= 1;
+int TSP(int current, int visited) {
+	int &ret = dp[current][visited];
+	if (ret != -1)
+		return ret;
+
+	if (visited == (1 << N) - 1) {
+
+		if (W[current][0] != 0)
+			return W[current][0];
+
+		return MAX;
 	}
-	cout << ans;
+	ret = MAX;
+	for (int i = 0; i < N; ++i) {
+
+		if (visited & (1 << i) || W[current][i] == 0)
+			continue;
+		ret = min(ret, TSP(i, visited | (1 << i)) + W[current][i]);
+	}
+	return ret;
 }
 
-//https://www.acmicpc.net/problem/1094
-//ë¹„íŠ¸ë¬¸ì œëŠ” ë¹„íŠ¸ë‹µê²Œ í’€ì–´ì•¼ ì œë§›
+int main(void) {
+
+	cin >> N;
+	for (int i = 0; i < N; ++i) {
+		for (int j = 0; j < N; ++j)
+			cin >> W[i][j];
+	}
+	memset(dp, -1, sizeof(dp));
+	cout << TSP(0, 1) << '\n';
+}
+
+//https://www.acmicpc.net/problem/2098
+//dp, ¹éÆ®·¡Å·, ºñÆ®¸¶½ºÅ· »ç¿ë
