@@ -1,51 +1,73 @@
-#include<iostream>
-#include<vector>
-#include<algorithm>
-#define MAX 15
+#include <iostream>
+#include <vector>
+#include <string>
+#include <algorithm>
 using namespace std;
 
 int L,C;
-char arr[MAX];
-vector<string>v;
-void Input()
+
+bool arr[26] = { 0,1,1,1,0,1,1,1,0,1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,1,1 };
+char alphabets[15];
+
+
+void Input() 
 {
 	cin >> L >> C;
-	for (int i = 0; i < L; i++)
-	{
-		cin >> arr[i];
-	}
+	for (int i = 0; i < L; i++) 
+		cin >> alphabets[i];
+	
 }
 
-void DFS(int i,string s)
+void dfs(string s, int now, int depth, char alphabets[]) 
 {
-	string pw = s;
-	if (i == C) 
+
+	if (depth == L) 
 	{
-		v.push_back(pw);
+		int za = 0;
+		int mo = 0;
+		for (int i = 0; i < s.length(); i++) 
+		{
+
+			if (arr[s[i] - 97]) 
+				za++;
+			
+			else 
+				mo++;
+			
+		}
+		if (za >= 2 && mo >= 1) 
+			cout << s << endl;
+		
 		return;
 	}
-	if (i == L)
-		return;
-	DFS(i, pw);
-	DFS(i + 1, pw + arr[i]);
+
+	for (int i = now + 1; i <= C - L + depth; i++) 
+		dfs(s + alphabets[i], i, depth + 1, alphabets);
+	
+
+
+
 }
+
+
 void soution()
 {
-	DFS(0,"");
+	sort(alphabets, alphabets + L);
+
+	string s = "";
+
+	for (int i = 0; i <= C - L; i++)
+		dfs(s + alphabets[i], i, 1, alphabets);
+	
 }
 
-int main(void)
+int main(void) 
 {
 	Input();
 	soution();
-	sort(v.begin(),v.end());
-
-	for (auto e : v)
-	{
-		cout << e << "\n";
-	}
 	return 0;
 }
 
+
 //https://www.acmicpc.net/problem/1759
-//
+//문제를 제대로 안읽어서 다시품... 모음 자음
