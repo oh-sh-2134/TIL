@@ -65,7 +65,7 @@ int main(void) {
 //https://www.acmicpc.net/board/view/38847
 
 /*
-반례
+반례 
 4 3
 2 1 2
 2 3 4
