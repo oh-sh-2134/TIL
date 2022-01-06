@@ -4,12 +4,14 @@
 #define MAX 1001
 using namespace std;
 
-int singer[MAX];
-bool checkDuplication[MAX][MAX];
+int indegree[MAX];
 vector<int> adj[MAX];
+vector<int> ans;
 
 int n, m;
+
 void Input() {
+	bool flag = false;
 	cin >> n >> m;
 	for (int i = 0; i < m; i++) {
 		int cnt;
@@ -19,12 +21,9 @@ void Input() {
 		
 		while(--cnt){
 			cin >> input;
-			if (!checkDuplication[previous][input]) {
-				checkDuplication[previous][input] = true;
-				adj[previous].push_back(input);
-				singer[input]++;
-				previous = input;
-			}
+			adj[previous].push_back(input);
+			indegree[input]++;
+			previous = input;
 		}
 	}
 }
@@ -33,20 +32,27 @@ void solution() {
 	queue<int>q;
 	int cnt = 0;
 	for (int i = 1; i <= n; i++) 
-		if (singer[i] == 0)
+		if (!indegree[i])
 			q.push(i);
-	if (q.empty()) 
-		cout << "0";
+
 	while (!q.empty()) {
 		int current = q.front();
 		q.pop();
-		cout << current<<"\n";
+		ans.push_back(current);
+		
 		for (auto iter : adj[current]) {
 			int next = iter;
-			if (--singer[next] == 0)
+			if (--indegree[next] == 0)
 				q.push(next);
 		}
 	}
+
+	if (ans.size() != n) {
+		ans.clear();
+		ans.push_back(0);
+	}
+	for (auto iter : ans)
+		cout << iter << "\n";
 }
 
 
@@ -55,5 +61,19 @@ int main(void) {
 	solution();
 }
 
-//Âü°í
+//ì°¸ê³ 
 //https://www.acmicpc.net/board/view/38847
+
+/*
+ë°˜ë¡€
+4 3
+2 1 2
+2 3 4
+2 4 3
+
+
+3 2
+2 2 3
+3 2 3 1
+
+*/
