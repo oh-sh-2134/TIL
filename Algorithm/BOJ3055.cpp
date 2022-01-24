@@ -9,7 +9,7 @@ int n, m;
 
 int dx[4] = { 0,0,1,-1 };
 int dy[4] = { 1,-1,0,0 };
-
+int end_x, end_y = 0;
 queue<pair<int, int>>s_q;
 queue<pair<int, int>>water_q;
 
@@ -20,17 +20,16 @@ void Input() {
 			cin >> arr[i][j];
 			if (arr[i][j] == 'S') s_q.push({ i,j });
 			else if (arr[i][j] == '*') water_q.push({ i,j });
+		
 		}
 	}
 }
 
 void solution() {
-	int water_qsize = water_q.size();
-	int s_qsize = s_q.size();
 	int cnt = 0;
 	while (!s_q.empty()) {
-		water_qsize = water_q.size();
-		s_qsize = s_q.size();
+		int water_qsize = water_q.size();
+		int s_qsize = s_q.size();
 		while (water_qsize--) {
 			int water_y = water_q.front().first;
 			int water_x = water_q.front().second;
@@ -51,6 +50,7 @@ void solution() {
 			int s_x = s_q.front().second;
 			s_q.pop();
 			visited[s_y][s_x] = true;
+
 			for (int i = 0; i < 4; i++) {
 				int move_y = s_y + dy[i];
 				int move_x = s_x + dx[i];
@@ -59,8 +59,11 @@ void solution() {
 					cout << cnt;
 					return;
 				}
-				if (arr[move_y][move_x] == '.' || visited[move_y][move_x]) 
+				if (arr[move_y][move_x] == '.' && !visited[move_y][move_x]){
+				
+					visited[move_y][move_x] = true;
 					s_q.push({ move_y ,move_x });
+				}
 				
 			}
 		}
@@ -68,11 +71,15 @@ void solution() {
 
 	}
 	cout << "KAKTUS";
-
+	return;
 }
 
 int main(void) {
 	Input();
 	solution();
+
+	return 0;
 }
 //https://www.acmicpc.net/problem/3055
+//62번라인에서 &&연산이 아닌 ||연산으로 해서 s_q의 크기가 지나치게 커져 메모리초과 받음
+//실수 안하도록 조심...
