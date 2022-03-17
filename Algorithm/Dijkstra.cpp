@@ -5,19 +5,19 @@
 using namespace std;
 
 vector<pair<int,int>> connect_info[N];
-// <°£¼±, °¡ÁßÄ¡>¸¦ °¡Áö´Â ¿¬°áÁ¤º¸
+// <ê°„ì„ , ê°€ì¤‘ì¹˜>ë¥¼ ê°€ì§€ëŠ” ì—°ê²°ì •ë³´
 
 void Dijkstra(int start)
 {
 	vector<int>node_dist(N, INF);
-	//current ³ëµåÀÇ ÃÖ´Ü°Å¸® ±×·¡ÇÁ°¡ ÀúÀåµÉ º¤ÅÍ ¹è¿­
+	//current ë…¸ë“œì˜ ìµœë‹¨ê±°ë¦¬ ê·¸ë˜í”„ê°€ ì €ì¥ë  ë²¡í„° ë°°ì—´
 	vector<bool>visited(N, false);
-	//³ëµåÀÇ ¹æ¹® ¿©ºÎ¸¦ ÀúÀåÇÒ º¤ÅÍ ¹è¿­
+	//ë…¸ë“œì˜ ë°©ë¬¸ ì—¬ë¶€ë¥¼ ì €ì¥í•  ë²¡í„° ë°°ì—´
 
 
 	node_dist[start] = 0;
 	visited[start] = true;
-	//start ³ëµå¿¡ ´ëÇÑ Ã³¸®
+	//start ë…¸ë“œì— ëŒ€í•œ ì²˜ë¦¬
 	while (true)
 	{
 		int current;
@@ -31,14 +31,14 @@ void Dijkstra(int start)
 				closest_dist = node_dist[i];
 			}
 		}
-		//¹æ¹®ÇÏÁö ¾ÊÀº ³ëµåÁß ÃÖ´Ü°Å¸® ³ëµå¸¦ Ã£´Â´Ù.
+		//ë°©ë¬¸í•˜ì§€ ì•Šì€ ë…¸ë“œì¤‘ ìµœë‹¨ê±°ë¦¬ ë…¸ë“œë¥¼ ì°¾ëŠ”ë‹¤.
 
 		if (closest_dist == INF) break;
-		//¿¬°áµÇ¾î ÀÖ´Â ³ëµå¸¦ ¸ğµÎ ¹æ¹® ÇßÀ»°æ¿ì Å»Ãâ
+		//ì—°ê²°ë˜ì–´ ìˆëŠ” ë…¸ë“œë¥¼ ëª¨ë‘ ë°©ë¬¸ í–ˆì„ê²½ìš° íƒˆì¶œ
 
 		visited[current] = true;
 		for (int i = 0; i < connect_info[current].size(); i++)
-			//current ³ëµå¿Í ¿¬°áµÇ¾î ÀÖ´Â ³ëµå¸¦ ¸ğµå¹æ¹®
+			//current ë…¸ë“œì™€ ì—°ê²°ë˜ì–´ ìˆëŠ” ë…¸ë“œë¥¼ ëª¨ë“œë°©ë¬¸
 		{
 			int next = connect_info[current][i].first;
 
@@ -46,7 +46,7 @@ void Dijkstra(int start)
 			
 			int next_dist = connect_info[current][i].second;
 			if (node_dist[next] > next_dist + node_dist[current])
-				//±âÁ¸¿¡ °¡Áö°í ÀÖ´Â °Å¸®º¸´Ù °¡±î¿ï °æ¿ì °»½Å
+				//ê¸°ì¡´ì— ê°€ì§€ê³  ìˆëŠ” ê±°ë¦¬ë³´ë‹¤ ê°€ê¹Œìš¸ ê²½ìš° ê°±ì‹ 
 			{
 				node_dist[next] = next_dist + node_dist[current];
 
@@ -57,9 +57,9 @@ void Dijkstra(int start)
 
 
 /*
-¿ì¼±¼øÀ§ Å¥ »ç¿ë
+ìš°ì„ ìˆœìœ„ í ì‚¬ìš©
 vector<pair<int, int>> connect_info[N];
-// <°£¼±, °¡ÁßÄ¡>¸¦ °¡Áö´Â ¿¬°áÁ¤º¸
+// <ê°€ì¤‘ì¹˜, ê°„ì„ >ë¥¼ ê°€ì§€ëŠ” ì—°ê²°ì •ë³´
 
 void Dijkstra(int start) {
 	vector<int> node_dist(N, INF);
@@ -68,20 +68,22 @@ void Dijkstra(int start) {
 	p_q.push(make_pair(0, start));
 
 	while (!p_q.empty()) {
+		//ê°€ì¤‘ì¹˜ì— -ë¥¼ ì£¼ì–´ ê¸°ì¡´ ë‚´ë¦¼ì°¨ìˆœì¸ ìš°ì„ íë¥¼ ì˜¤ë¦„ì°¨ìˆœì²˜ëŸ¼ ì‚¬ìš©
+		//priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>> ì˜¤ë¦„ì°¨ìˆœ ìš°ì„ íì‚¬ìš©
 		int current_dist = -p_q.top().first;
 		int current = p_q.top().second;
 		p_q.pop();
 
 		if (node_dist[current] < current_dist) continue;
-		//ÇöÁ¦ ¹æ¹®ÇÑ ³ëµå°¡ °¡Áö°íÀÖ´Â ÃÖ¼Ò°Å¸®º¸´Ù Å« °¡ÁßÄ¡¸¦ °¡Á³À¸¸é È®ÀÎÇÏÁö ¾ÊÀ½
+		//í˜„ì œ ë°©ë¬¸í•œ ë…¸ë“œê°€ ê°€ì§€ê³ ìˆëŠ” ìµœì†Œê±°ë¦¬ë³´ë‹¤ í° ê°€ì¤‘ì¹˜ë¥¼ ê°€ì¡Œìœ¼ë©´ í™•ì¸í•˜ì§€ ì•ŠìŒ
 
 		
 		for (int i = 0; i < connect_info[current].size(); ++i) 
-			// ÇØ´ç ³ëµå¿¡¼­ ÀÎÁ¢ÇÑ Á¤Á¡µéÀ» ¸ğµÎ È®ÀÎ
+			// í•´ë‹¹ ë…¸ë“œì—ì„œ ì¸ì ‘í•œ ì •ì ë“¤ì„ ëª¨ë‘ í™•ì¸
 		{
 			int next = connect_info[current][i].first;
 			int next_dist = connect_info[current][i].second;
-			// ´õ ÂªÀº °æ·Î¸¦ ¹ß°ßÇÏ¸é, node_dist¸¦ °»½ÅÇÏ°í ´ÙÀ½ È®ÀÎ´ë»ó¿¡ Ãß°¡ÇÏ±âÀ§ÇØ ¿ì¼±¼øÀ§ Å¥¿¡ ³ÖÀ½
+			// ë” ì§§ì€ ê²½ë¡œë¥¼ ë°œê²¬í•˜ë©´, node_distë¥¼ ê°±ì‹ í•˜ê³  ë‹¤ìŒ í™•ì¸ëŒ€ìƒì— ì¶”ê°€í•˜ê¸°ìœ„í•´ ìš°ì„ ìˆœìœ„ íì— ë„£ìŒ
 			if (node_dist[next] > next_dist + current_dist) {
 				node_dist[next] = next_dist + current_dist;
 				p_q.push(make_pair(-node_dist[next], next));
