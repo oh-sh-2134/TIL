@@ -16,7 +16,7 @@ struct Point
 	int cnt;
 };
 
-int min(int a, int b) { return a > b ? a : b; }
+int min(int a, int b) { return a > b ? b : a; }
 
 int bfs(Point src, Point dist) {
 	bool visited[4][4] = { false };
@@ -24,6 +24,7 @@ int bfs(Point src, Point dist) {
 	q.push(src);
 	while (!q.empty()) {
 		Point curr = q.front();
+		q.pop();
 		if (curr.row == dist.row && curr.col == dist.col) return curr.cnt;
 
 
@@ -42,7 +43,7 @@ int bfs(Point src, Point dist) {
 
 			for (int j=0; j < 2; j++) {
 				if (Board[nr][nc] != 0) break;
-				if (nr + d[i][0] < 0 || nr + d[i][0]>3 || nc + d[i][1] < 0 || nc | d[i][1] >3) break;
+				if (nr + d[i][0] < 0 || nr + d[i][0]>3 || nc + d[i][1] < 0 || nc + d[i][1] >3) break;
 
 				nr += d[i][0];
 				nc += d[i][1];
@@ -53,7 +54,7 @@ int bfs(Point src, Point dist) {
 				Point p;
 				p.row = nr;
 				p.col = nc;
-				p.cnt = curr.cnt + 1;
+				p.cnt = curr.cnt +1;
 				q.push(p);
 			}
 		}
@@ -63,8 +64,9 @@ int bfs(Point src, Point dist) {
 
 int permutate(Point src) {
 	int ret = INF;
-	vector<Point> card;
+	
 	for (int n = 1; n < 7; n++) {
+		vector<Point> card;
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {
 				if (Board[i][j] == n) {
@@ -106,3 +108,4 @@ int solution(vector<vector<int>> board, int r, int c) {
 	p.cnt = 0;
 	return permutate(p);
 }
+
