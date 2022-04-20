@@ -21,7 +21,7 @@ void input() {
 	for (int i = 0; i < n; i++) {
 		string s;
 		cin >> s;
-		for (int j = 0; j < m; j++) {					
+		for (int j = 0; j < m; j++) {
 			arr[i][j] = s[j];
 			if (arr[i][j] == '0') {
 				start.y = i;
@@ -43,29 +43,30 @@ int bfs(int sY, int sX) {
 		int state = q.front().second.second;
 		q.pop();
 		if (arr[y][x] == '1') return cnt;
-		visited[y][x][state] = true;
 		for (int i = 0; i < 4; i++) {
 			int dy = y + ny[i];
 			int dx = x + nx[i];
-			//¹æ¹® Ã¼Å©
-			if (visited[dy][dx][state]) continue;
-			//¹üÀ§ Ã¼Å©
-			if (dy >= n || dy<0 || dx>=m || dx < 0) continue;
-			//º® Ã¼Å©
+			//ë²”ìœ„ ì²´í¬
+			if (dy >= n || dy < 0 || dx >= m || dx < 0) continue;
+			//ë²½ ì²´í¬
 			if (arr[dy][dx] == '#') continue;
-			//¿­¼è È¹µæ
+			//ì—´ì‡  íšë“
 			if (arr[dy][dx] >= 'a' && arr[dy][dx] <= 'f') {
-				//state¸¦ ¾Æ·¡¿Í °°ÀÌ °¡Á®°¡¸é for¹®À» µ¹¸é¼­ ¿­¼è°¡ ¾ø´Â »óÅÂ·Î ¹æ¹®À» ¿­¾î¾ßÇÒ¶§ ÀÌÀü for¹®¿¡ ÀÇÇØ ¿­¼è°¡ ÀÖ´Â °æ¿ì°¡ »ý±è
+				//stateë¥¼ ì•„ëž˜ì™€ ê°™ì´ ê°€ì ¸ê°€ë©´ forë¬¸ì„ ëŒë©´ì„œ ì—´ì‡ ê°€ ì—†ëŠ” ìƒíƒœë¡œ ë°©ë¬¸ì„ ì—´ì–´ì•¼í• ë•Œ ì´ì „ forë¬¸ì— ì˜í•´ ì—´ì‡ ê°€ ìžˆëŠ” ê²½ìš°ê°€ ìƒê¹€
 				//state = state | (1 << (arr[dy][dx] - 'a'));
 				int new_state = state | (1 << (arr[dy][dx] - 'a'));
+				if (visited[dy][dx][new_state]) continue;
+				visited[dy][dx][new_state] = true;
 				q.push({ { dy,dx }, { cnt + 1,new_state } });
 				continue;
 			}
-			//¿­¼è Ã¼Å©
-			if (arr[dy][dx] >= 'A' && arr[dy][dx] <= 'F') {
-				if ((state &  (1 << (arr[dy][dx] - 'A')))==0)
+			//ì—´ì‡  ì²´í¬
+			else if (arr[dy][dx] >= 'A' && arr[dy][dx] <= 'F') {
+				if ((state &  (1 << (arr[dy][dx] - 'A'))) == 0)
 					continue;
 			}
+			if (visited[dy][dx][state]) continue;
+			visited[dy][dx][state] = true;
 			q.push({ { dy,dx }, { cnt + 1,state } });
 		}
 	}
@@ -80,4 +81,4 @@ int main(void) {
 	input();
 	solution();
 }
-//https://www.acmicpc.net/problem/1194
+//https://www.acmicpc.net/problem/1194 
