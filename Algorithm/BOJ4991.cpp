@@ -1,13 +1,14 @@
 #include <iostream>
 #include <queue>
-#define MAX 20
+#include<cstring>
+#define MAX 21
 using namespace std;
 
-char room[MAX][MAX];
-int cleanCnt[20][20][(1 << 9)];
+int room[MAX][MAX];
+int cleanCnt[MAX][MAX][(1 << 11)];
 int dy[4] = { 0,0,1,-1 };
 int dx[4] = { 1,-1,0,0 };
-char cnt;
+int cnt;
 int n, m;
 struct point
 {
@@ -16,75 +17,75 @@ struct point
 };
 point startPoint;
 
-int min(int a, int b) { return a > b ? b : a; }
-
 void bfs() {
-	int minDist = 987654321;
-	queue < pair < pair<int, int>, pair<int, int>> >q;
-	q.push({ { startPoint.y, startPoint.x },{0,0} });
-	cleanCnt[startPoint.y][startPoint.x][0] = 0;
+	queue < pair < pair<int, int> ,int> >q;
+	q.push({ { startPoint.y, startPoint.x },{0} });
+	cleanCnt[startPoint.y][startPoint.x][0] = 1;
 	while (!q.empty()) {
 		int y = q.front().first.first;
 		int x = q.front().first.second;
-		int cnt = q.front().second.first;
-		int state = q.front().second.second;
+		int state = q.front().second;
 		q.pop();
 		for (int i = 0; i < 4; i++) {
-			int ny = y + dy[i];
+			int ny = y + dy[i]; 
 			int nx = x + dx[i];
 
-			//¹üÀ§ Ã¼Å©
+			//ë²”ìœ„ ì²´í¬
 			if (ny >= n || ny < 0 || nx >= m || nx < 0) continue;
 
-			//´õ·¯¿î °÷ÀÏ¶§
-			if (room[ny][nx] >= '0' && room[ny][nx] <= '9') {
-				int newState = state | (1 << (room[ny][nx] - '0'));
-				if (newState == ((1 << (cnt - '0' + 1)) - 1)) {
-					minDist = min(minDist, cleanCnt[y][x][state] + 1);
-					continue;
-				}
-				if (cleanCnt[ny][nx][newState] < cleanCnt[y][x][state] + 1) continue;
+			if (room[ny][nx] < 0) continue;
+			
+			//ë”ëŸ¬ìš´ ê³³ì¼ë•Œ
+			if (room[ny][nx]>0) {
+				int newState = state | (1 << (room[ny][nx]-1));
 
-				q.push({ {ny, nx},{ cleanCnt[y][x][state] + 1, newState} });
+				//ë”ëŸ¬ìš´ê³³ì´ ì—†ë‹¤ë©´
+				if (newState == ((1 << cnt) - 1)) {
+					cout<< cleanCnt[y][x][state]<<"\n";
+					return;					
+				}
+
+				if (cleanCnt[ny][nx][newState]) continue;
+				cleanCnt[ny][nx][newState] = cleanCnt[y][x][state] + 1;
+				q.push({ {ny, nx}, newState} );
 			}
-			if (cleanCnt[ny][nx][state] < cleanCnt[y][x][state] + 1) continue;
-			q.push({ {ny, nx},{ cleanCnt[y][x][state] + 1, state} });
+			if (cleanCnt[ny][nx][state]) continue;
+			cleanCnt[ny][nx][state] = cleanCnt[y][x][state] + 1;
+			q.push({ {ny, nx}, state });
 		}
 	}
-	if (minDist == 987654321)
-		cout << -1;
-	else
-		cout << minDist;
+	
+	
+	cout << -1 << "\n";
 }
 
 void solution() {
 	while (true) {
-		cin >> n >> m;
+		cin >> m >> n;
 		if (n == 0 && m == 0) break;
-		//*´Â ÃÑ 10°³±îÁö±â ¶§¹®¿¡ *À» ¼ýÀÚ·Î ¸¶Å·ÇÏ¿© ¸ðµÎ ¹æ¹®ÇßÀ»¶§ »óÅÂÀÇ ÃÖ¼Ú°ªÀ» Ã£¾Æ³»¸é µÊ
-		cnt = '0';
+		cnt = 0;
+		memset(cleanCnt, 0, sizeof(cleanCnt));
+		memset(room, 0, sizeof(room));
+		char c;
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < m; j++) {
-				cin >> room[i][j];
-				if (room[i][j] == '*') {
-					room[i][j] = cnt;
-					cnt += 1;
-				}
-				else if (room[i][j] == 'o') {
+				cin >> c;
+				
+				if (c == '*')
+					room[i][j] = ++cnt;
+
+				else if (c == 'x')
+					room[i][j] = -1;
+
+				else if (c == 'o') {
 					startPoint.y = i;
 					startPoint.x = j;
+					room[i][j] = 0;
 				}
+				else
+					room[i][j] = 0;
 			}
 		}
-		for (int i = 0; i < 20; i++) {
-			for (int j = 0; j < 20; j++) {
-				for (int b = 0; b < (1 << 9); b++) {
-					cleanCnt[i][j][b] = 987654321;
-				}
-			}
-		}
-	
-
 		bfs();
 	}
 }
