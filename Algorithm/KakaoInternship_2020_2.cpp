@@ -3,98 +3,97 @@
 #include <iostream>
 #include <math.h>
 using namespace std;
+vector<char> ex;
+vector<long long> nums;
+pair<string, bool> oper[3] = { {"+",false}, {"-",false}, {"*",false} };
+long long maxIdx;
 
-int abs(int a) {
-	return a >= 0 ? a : a * (-1);
+long long max(long long  a, long long b) { return a > b ? a : b; }
+
+//연산자랑 숫자주면 계산해주는 함수
+long long getResult(char ex, long long a, long long b) {
+	switch (ex)
+	{
+	case '*':
+		return a * b;
+
+	case '+':
+		return a + b;
+
+	case '-':
+		return a - b;
+	}
 }
-string cal(string str, int p, char c) { // str : 식 / p : 연산자 위치 / c : 연산자
-	int s = 0 , f = 0; // f : 연산자의 앞 숫자 / s : 연산자의 뒷 숫자 
-	int fn, sn, sum; 
-	string front, back; 
-	bool flag=false;
-	for (int i = p + 1; ; i++) {
-		if (str[p+1] == '-' && !flag) { // 뒷숫자의 부호 체크
-			flag = true;
+
+//연산의 순서가 정해지면 계산시작
+long long cal(string exp) {
+	vector<char> tempEx = ex;
+	vector<long long> tempNums = nums;
+	for (int i = 0; i < 3; i++) {
+		for (int e = 0; e < tempEx.size(); e++) {
+			//연산 순서에 맞는 연산이 나올때
+			if (exp[i] == tempEx[e]) {
+				//숫자2개 연산자 하나로 계산하기 때문에 계산 결과를 첫번째 숫자 vector에 넣고 숫자와 연산자 하나씩 삭제
+				tempNums[e] = getResult(tempEx[e], tempNums[e], tempNums[e + 1]);
+				tempNums.erase(tempNums.begin() + e + 1);
+				tempEx.erase(tempEx.begin() + e);
+				e--;
+			}
+		}
+	}
+	return abs(tempNums[0]);
+}
+
+void dfs(string exp) {
+	//연산의 순서가 정해지면
+	if (exp.size() == 3) {
+		maxIdx = max(maxIdx, cal(exp));
+	}
+
+	for (int i = 0; i < 3; i++) {
+		if (oper[i].second) continue;
+		oper[i].second = true;
+		dfs(exp + oper[i].first);
+		oper[i].second = false;
+	}
+
+}
+
+// 파싱함수
+void convert(string s) {
+	int i = 0;
+	string num = "";
+	for (int i = 0; i < s.size(); i++) {
+		if (s[i] == '*' || s[i] == '+' || s[i] == '-') {
+			ex.push_back(s[i]);
+			nums.push_back(stoi(num));
+			num.clear();
+			num.resize(0);
 			continue;
 		}
-		else if (str[i] >= '0' && str[i] <= '9') {
-			s = s * 10 + int(str[i] - '0'); //string -> int
-			sn = i;
-		}
-		else {
-			if (flag)
-				f *= (-1);
-			break;
-		}
+		num.push_back(s[i]);
 	}
-	flag = false;
-	for (int i = p - 1; i>=0 ; i--) {
-		if (str[i] >= '0' && str[i] <= '9') {
-			f = f + long long(str[i] - '0')*pow(10 , (p - 1 - i)); //stirng -> int
-			fn = i;
-		}
-		else if (str[i] == '-') { //앞 숫자의 부호 체크
-			if (i == 0) { // - 부호의 위치가 0인 case
-				f *= (-1);
-				fn = i;
-				break;
-			}
-			else {
-				if (!(str[i - 1] >= '0' && str[i - 1] <= '9')) {
-					f *= (-1);
-					fn = i;
-					break;
-				}
-				else
-					break;
-			}
-		}
-		else 
-			break;
-	}
-	if (c == '+')
-		sum = s + f;
-	else if (c == '*')
-		sum = s * f;
-	else
-		sum = f - s;
-	front = str.substr(0, fn); // 연산에 사용되지 않은 앞부분 string
-	back = str.substr(sn + 1, str.size() - 1); // 연산에 사용된 뒷부분 string 
-	return str = front + std::to_string(sum) + back; // 다시 string 형태로 반환
-}
-
-long long max(long a, long b) {
-	return a > b ? a : b;
+	nums.push_back(stoi(num));
 }
 
 long long solution(string expression) {
-	long long answer = 0;
-	string arr[6] = { "+*-","+-*","-+*","-*+","*+-","*-+" }; //연산의 순서에 따라 배열로 정의
-	for (int i = 0; i < 6; i++) 
-	{
-		string str = expression;
-		for (int n = 0; n < 3; n++) 
-		{
-			for (int j = 1; j < str.size(); j++) 
-			{
-				if (str[j] == arr[i][n] && (str[j-1] >= '0' && str[j-1] <= '9'))  //해당 연산자 체크 / find함수 사용 가능
-				{
-					str = cal(str, j, arr[i][n]);
-				}
-			}
-		}
-		answer = max(answer, abs(stoi(str)));
+	convert(expression);
+	for (int i = 0; i < 3; i++) {
+		oper[i].second = true;
+		dfs(oper[i].first);
+		oper[i].second = false;
 	}
-
+	long long answer = maxIdx;
 	return answer;
 }
 
 int main(void) {
 	string s = "100-200*300-500+20"; //60420   //1번 예제
-	s = "50*6-3*2"; //300		2번예제
+	//s = "50*6-3*2"; //300		2번예제
 	cout << solution(s);
 }
 //https://tech.kakao.com/2020/07/01/2020-internship-test/
 //0503 cal함수에서 숫자 추출하는 부분을 좀 더 고민해봐야겠음...
 //0504 cal함수에서 숫자 추출하고 연산하는 부분까지 했음 앞뒤로 남은 문자열과 함께 다시 합치는 부분  
 //0505 cal함수에서 나머지 부분의 문자열을 추출하는 부분에서 substr을 사용, 연산의 결과가 -일때 연산부호와 숫자부호를 구별하는 flag //프로그래머스 제출 
+//0503 1년만에 다시 돌아왔는데 맞은줄 알고 있었음 완전탐색으로 풀이함 실력이 늘어가는게 느껴짐 뿌듯 >_<
