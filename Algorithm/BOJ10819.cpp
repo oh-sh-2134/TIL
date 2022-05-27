@@ -1,58 +1,32 @@
 #include<iostream>
+#include <algorithm>
 
 using namespace std;
 
-int check[10];
-int arr[10];
-int tmp_arr[10];
-int max_idx;
-int N;
+int n, i, sum, temp;
+int arr[8];
 
-int max(int a, int b) { return a > b ? a : b; }
-
-void Input() {
-	cin >> N;
-	for (int i = 0; i < N; i++)
+void input() {
+	cin >> n;
+	for (int i = 0; i < n; i++)
 		cin >> arr[i];
 }
 
-int cal() {
-	int res = 0;
-	for (int i = 0; i < N-1; i++)
-		res += abs(tmp_arr[i] - tmp_arr[i + 1]);
-	return res;
+void solution() {
+	sort(arr, arr + n);
+
+	do {
+		temp = 0;
+		for (i = 0; i < n - 1; i++) {
+			temp += abs(arr[i] - arr[i + 1]);
+		}
+		sum = max(sum, temp);
+	} while (next_permutation(arr, arr + n));
+
+	cout << sum;
 }
 
-int dfs(int n) {
-	if (n == N-1) 
-		return cal();
-	
-	for (int i = 0; i < N; i++) {
-		if (check[i]) continue;
-
-		tmp_arr[n+1] = arr[i];
-		check[i] = 1;
-		dfs(n+1);
-		check[i] = 0;
-	}
-
-	return 0;
-}
-
-void sol()
-{
-	int max_idx = 0;
-	for (int i = 0; i < N; i++) {
-		check[i] = 1;
-		tmp_arr[0] = arr[i];
-		max_idx=max(dfs(0),max_idx);
-		check[i] = 0;
-	}
-	cout << max_idx;
-}
-
-int main(void)
-{
-	Input();
-	sol();
+int main(void) {
+	input();
+	solution();
 }
