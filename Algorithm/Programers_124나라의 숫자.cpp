@@ -1,19 +1,19 @@
-﻿#include <string>
-#include <vector>
-#include <algorithm>
-using namespace std;
+#include<string>
+#include<vector>
+#include<algorithm>
 
-string Str[] = { "4" , "1" , "2" };
+using namespace std;
 
-string solution(int n)
-{
-	string answer  = "";
-	while (n  > 0)
-	{
-		answer  += Str[n  % 3];
-		if (n  % 3 == 0) n  = (n  / 3) - 1;
-		else n  = n  / 3;
+string s = "412";
+
+string solution(int n) {
+	string answer = "";
+	while (n > 0) {
+		answer += s[n % 3];
+		n /= 3;
+		if (answer[answer.size() - 1] == '4')
+			n--;
 	}
 	reverse(answer.begin(), answer.end());
-	return answer;
+	return answer;
 }
