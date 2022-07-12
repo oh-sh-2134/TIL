@@ -14,27 +14,27 @@ vector<int> solution(int n, vector<string> words) {
 
 	for (auto iter : words) {
 
-		//³¡¸»ÀÕ±â ÇÑ»çÀÌÅ¬ µ¹¾ÒÀ»‹š
+		//ëë§ì‡ê¸° í•œì‚¬ì´í´ ëŒì•˜ì„ë•Œ
 		if (cnt == n) {
 			cnt = 0;
 			totalCnt++;
 		}
 		cnt++;
 
-		//ÀÌ¾î ¹ŞÀ» ±ÛÀÚ°¡ ¾øÀ»¶§
+		//ì´ì–´ ë°›ì„ ê¸€ìê°€ ì—†ì„ë•Œ
 		if (lastChar == ' ') {
 			lastChar = iter[iter.size() - 1];
 			s.insert(iter);
 			continue;
 		}
 
-		//¾Õ»ç¶÷ÀÇ ¸¶Áö¸· ¾ËÆÄºª°ú µ¿ÀÏÇÏÁö ¾ÊÀº °æ¿ì
+		//ì•ì‚¬ëŒì˜ ë§ˆì§€ë§‰ ì•ŒíŒŒë²³ê³¼ ë™ì¼í•˜ì§€ ì•Šì€ ê²½ìš°
 		if (lastChar != iter[0]) {
 			answer.clear();
 			break;
 		}
 
-		//¸»Çß´ø °ÍÀ» ¸»ÇÒ°æ¿ì
+		//ë§í–ˆë˜ ê²ƒì„ ë§í• ê²½ìš°
 		if (s.find(iter) != s.end()) {
 			answer.clear();
 			break;
@@ -46,7 +46,7 @@ vector<int> solution(int n, vector<string> words) {
 
 	}
 
-	//³¡±îÁö ´Ù µ¹Áö ¸øÇßÀ»¶§
+	//ëê¹Œì§€ ë‹¤ ëŒì§€ ëª»í–ˆì„ë•Œ
 	if (answer.size() == 0) {
 		answer.push_back(cnt);
 		answer.push_back(totalCnt);
