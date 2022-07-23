@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <vector>
 #include <queue>
 #define MAX 10
@@ -47,9 +47,10 @@ public:
 	int move(int dir) {
 		int moveCnt = 0;
 		while (true) {
+			//현재가 구멍일때
 			if (field[y][x] == Hole) break;
-			char next = field[y + my[dir]][x + mx[dir]];
-			if (next != None && next != Hole) break;
+			//다음이 벽일때
+			if (field[y + my[dir]][x + mx[dir]] == Wall) break;
 			y += my[dir];
 			x += mx[dir];
 			moveCnt++;
@@ -86,12 +87,10 @@ void input() {
 			if (field[i][j] == Red) {
 				ry = i;
 				rx = j;
-				field[i][j] = None;
 			}
 			else if (field[i][j] == Blue) {
 				by = i;
 				bx = j;
-				field[i][j] = None;
 			}
 
 		}
@@ -127,10 +126,10 @@ void bfs() {
 
 				//이동 거리가 더 많은 구슬이 한칸 반대로 움직임
 				if (rMove > bMove) {
-					r = Bead(r.getY() - my[i], r.getX() - my[i], r.getDircCnt());
+					r = Bead(r.getY() - my[i], r.getX() - mx[i], r.getDircCnt());
 				}
 				else {
-					b = Bead(b.getY() - my[i], b.getX() - my[i], b.getDircCnt());
+					b = Bead(b.getY() - my[i], b.getX() - mx[i], b.getDircCnt());
 				}
 			}
 			
