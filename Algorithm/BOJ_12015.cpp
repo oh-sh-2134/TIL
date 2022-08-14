@@ -1,5 +1,6 @@
-﻿#include <iostream>
+#include <iostream>
 #include <vector>
+#include<algorithm>
 using namespace std;
 
 int n;
@@ -20,25 +21,24 @@ int lowerBound(int idx, int val) {
 	while (lo <= hi) {
 		int mid = (lo + hi) / 2;
 		if (v[mid] >= val) {
-			lo = mid - 1;
+			hi = mid - 1;
 			rst = mid;
 		}
 		else {
-			hi = mid + 1;
+			lo = mid + 1;
 		}
 	}
 	return rst;
 }
 void solution() {
-	for (int i = 0; i < n; i++) {
-		if (v.empty()) { 
-			v.push_back(arr[i]); 
-			continue; 
-		}
+	v.push_back(arr[0]);
+	for (int i = 1; i < n; i++) {
 		if (v.back() < arr[i]) {
 			v.push_back(arr[i]);
 		}
-		else {
+		else {   
+			//lower_bound 사용 가능
+			//*lower_bound(v.begin(), v.end(), arr[i]) = arr[i];
 			v[lowerBound(v.size()-1, arr[i])] = arr[i];
 		}
 	}
