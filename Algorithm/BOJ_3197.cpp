@@ -1,8 +1,16 @@
-﻿#include <iostream>
+#include <iostream>
 #include <queue>
 using namespace std;
 
-
+class Point {
+public:
+	int y, x;
+	Point(int a, int b) {
+		y = a;
+		x = b;
+	}
+	Point(){}
+};
 
 int R, S;
 int days = 0;
@@ -15,20 +23,11 @@ int mx[4] = { 0,0,1,-1 };
 int my[4] = { 1,-1,0,0 };
 
 
-class Point {
-public:
-	int y, x;
-	Point(int a, int b) {
-		y = a;
-		x = b;
-	}
-};
-
 
 
 void input() {
 	cin >> R >> S;
-	field = vector<vector<char>>(R, vector<char>(S, ' '));
+	field = vector<vector<char>>(R, vector<char>(S, '.'));
 	visited = vector<vector<bool>>(R, vector<bool>(S, false));
 	for (int i = 0; i < R; i++) {
 		for (int j = 0; j < S; j++) {
@@ -81,12 +80,27 @@ void BFS(int cy, int cx) {
 			int x = mx[i] + cur.x;
 			if (y >= R || y < 0 || x >= S || x < 0) continue;
 			if (visited[y][x]) continue;
-			if (field[y][x] == '.') {
-				if (mealtField.back().y == cur.y && mealtField.back().x == cur.x) continue;
-				mealtField.push(cur);
+			visited[y][x] = true;
+			if ((field[cur.y][cur.x] == 'X' && field[y][x] == '.')|| (field[cur.y][cur.x] == '.' && field[y][x] == 'X')) {
+				if (mealtField.empty()) {
+					if (field[cur.y][cur.x] == 'X' && field[y][x] == '.') {
+						mealtField.push(cur);
+					}
+					else {
+						mealtField.push(Point(y, x));
+					}
+				}
+				else if (mealtField.back().y != cur.y && mealtField.back().x != cur.x) {
+					if (field[cur.y][cur.x] == 'X' && field[y][x] == '.') {
+						mealtField.push(cur);
+					}
+					else {
+						mealtField.push(Point(y, x));
+					}
+				}
 			}
 			if (field[y][x] == 'L') continue;
-			visited[y][x] = true;
+			
 			q.push(Point(y, x));
 		}		
 	}
@@ -94,7 +108,12 @@ void BFS(int cy, int cx) {
 
 void solution() {
 	while (true) {
-		fill(visited.begin(), visited.end(), false);
+		for (int i = 0; i < R; i++) {
+			for (int j = 0; j < S; j++) {
+				visited[i][j] = false;
+			}
+		}
+		//fill(visited.begin(), visited.end(), 0);
 		if (findBecjo(becjo)) break;
 		for (int i = 0; i < R; i++) {
 			for (int j = 0; j < S; j++) {
