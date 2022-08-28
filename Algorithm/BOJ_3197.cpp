@@ -17,10 +17,9 @@ int days = 0;
 vector<vector<char>> field;
 vector<vector<bool>> visited;
 queue<Point> water;
-queue<Point> newWater;
-queue<Point> next;
-queue<Point> newnext;
-Point swan;
+queue<Point> nextWater;
+queue<Point> area;
+queue<Point> nextArea;
 
 int mx[4] = { 0,0,1,-1 };
 int my[4] = { 1,-1,0,0 };
@@ -32,17 +31,19 @@ void input() {
 	cin >> R >> S;
 	field = vector<vector<char>>(R, vector<char>(S, '.'));
 	visited = vector<vector<bool>>(R, vector<bool>(S, false));
+	Point swan;
 	for (int i = 0; i < R; i++) {
 		for (int j = 0; j < S; j++) {
 			cin >> field[i][j];
 			if (field[i][j] == 'L') {
 				swan = Point(i, j);
 			}
-			else if (field[i][j] != 'X') {
+			if (field[i][j] != 'X') {
 				water.push(Point(i, j));
 			}
 		}
 	}
+	area.push(swan);
 }
 
 void meltIce() {
@@ -55,31 +56,31 @@ void meltIce() {
 			if (y >= R || y < 0 || x >= S || x < 0) continue;
 			if (field[y][x] == 'X') {
 				field[y][x] = '.';
-				break;
+				nextWater.push(Point(y, x));
+				//break; 여기 때문에 5%에서 틀림 - https://www.acmicpc.net/board/view/94425
 			}
 		}
 	}
 }
 
-bool findSwan(Point p) {
-	queue<Point> q;
-	q.push(p);
-	visited[p.y][p.x] = true;
-	while (!q.empty()) {
-		Point cur = q.front();
-		q.pop();
+bool findSwan() {
+	while (!area.empty()) {
+		Point cur = area.front();
+		visited[cur.y][cur.x] = true;
+		area.pop();
 		for (int i = 0; i < 4; i++) {
 			int y = my[i] + cur.y;
 			int x = mx[i] + cur.x;
 			if (y >= R || y < 0 || x >= S || x < 0) continue;
 			if (visited[y][x]) continue;
+			visited[y][x] = true;
 			if (field[y][x] == 'X') {
-				newnext.push(Point(y, x));
-				continue;
+				nextArea.push(Point(y, x));
+			}
+			else if (field[y][x] == '.') {
+				area.push(Point(y, x));
 			}
 			if (field[y][x] == 'L') return true;
-			visited[y][x] = true;
-			q.push(Point(y, x));
 		}
 
 
@@ -89,12 +90,12 @@ bool findSwan(Point p) {
 
 void solution() {
 	while (true) {		
-		if (findSwan(swan)) break;		
+		if (findSwan()) break;		
 		meltIce();
-		next = newnext;
-		water = newWater;
-		newnext = queue<Point>();
-		newWater = queue<Point>();
+		area = nextArea;
+		water = nextWater;
+		nextArea = queue<Point>();
+		nextWater = queue<Point>();
 		days++;
 	}
 	cout << days;
