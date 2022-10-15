@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <vector>
 
 using namespace std;
@@ -7,6 +7,10 @@ int N;
 vector<vector<char>> arr;
 vector<pair<int, int>> teacher;
 bool canAvoid = false;
+
+int mx[4] = { 0,0,1,-1 };
+int my[4] = { 1,-1,0,0 };
+
 void input() {
 	cin >> N;
 	arr.resize(N, vector<char>(N));
@@ -19,50 +23,52 @@ void input() {
 	}
 }
 
-void avoidMonitor() {
+//회피할 수 있는지 확인
+bool avoidMonitor() {
 	for (int i = 0; i < teacher.size(); i++) {
-
-		bool flag = true;
-		auto current = teacher[i];
-		//위로
-		while (flag) {
-			
-		}
-
-		//아래
-		while (flag) {
-
-		}
-
-		//오른쪽
-		while (flag) {
-
-		}
-
-		//왼쪽
-		while (flag) {
-
+		for (int j = 0; j < 4; j++) {
+			int y = teacher[i].first;
+			int x = teacher[i].second;
+			while (true) {
+				y += my[j];
+				x += mx[j];
+				//범위를 벗어나면 안됨
+				if (y < 0 || y >= N || x < 0 || x >= N) break;
+				//X이면 다음 공간을 확인 해야함
+				if (arr[y][x] == 'X') continue;
+				//S가 보이면 실패
+				if (arr[y][x] == 'S') return false;
+				//T와 O의 케이스
+				break;
+			}
 		}
 	}
+	return true;
+		
 }
 
 void dfs(int cnt) {
+	//피할 수 있는 경우가 있다면 더 이상 탐색하지 않음
+	if (canAvoid) return;
+	//3개를 모두 설치했을때 확인
 	if (cnt == 3) {
-		avoidMonitor();
+		canAvoid = avoidMonitor();
+		return;
 	}
 	for (int i = 0; i < N; i++) {
 		for (int j = 0; j < N; j++) {
 			if (arr[i][j] != 'X') continue;
 			arr[i][j] = 'O';
 			dfs(cnt + 1);
-			if (canAvoid) return;
 			arr[i][j] = 'X';
+			if (canAvoid) return;
 		}
 	}
 }
 
 void solution() {
-	dfs(1);
+	//완전 탐색으로 풀이
+	dfs(0);
 	if (canAvoid) cout << "YES";
 	else cout << "NO";
 }
