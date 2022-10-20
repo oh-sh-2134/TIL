@@ -1,10 +1,13 @@
-﻿#include <iostream>
+#include <iostream>
 #include <vector>
 
 using namespace std;
 
-vector<int> arr;
-vector<bool> visited;
+vector<int> pizzaA;
+vector<int> pizzaB;
+vector<int> cntA;
+vector<int> cntB;
+
 int n;
 int a, b;
 int cnt;
@@ -13,38 +16,42 @@ int cnt;
 void input() {
 	cin >> n;
 	cin >> a >> b;
+	pizzaA.resize(a+1);
+	pizzaB.resize(b+1);
 	for (int i = 0; i < a; i++) {
-		int p;
-		cin >> p;
-		arr.push_back(p);
+		cin >> pizzaA[i];
 	}
 	for (int i = 0; i < b; i++) {
-		int p;
-		cin >> p;
-		arr.push_back(p);
+		cin >> pizzaB[i];
 	}
-	visited.resize(a + b, false);
+	cntA.resize(2000001);
+	cntB.resize(2000001);
 }
 
-void dfs(int cur) {
-	if (cur > n) return;
-	if (cur == n) {
-		cnt++; 
-		return;
-	}
-	for (int i = 0; i < a + b; i++) {
-		if (visited[i]) continue;
-		visited[i] = true;
-		dfs(arr[i]+cur);
-		visited[i] = false;
+void func(int p, vector<int> arr, vector<int> arrCnt) {
+	for (int i = 1; i <= p; i++) {
+		int sum = 0;
+		for (int j = 0; j < i; j++) sum += arr[j];
+		arrCnt[sum]++;
+		if (sum == n) cnt++;
+
+		if (i == p) break;
+		for (int j = 1; j < p; j++) {
+			sum -= arr[j - 1];
+			sum += arr[(j + i - 1) % p];
+			arrCnt[sum]++;
+			if (sum == n) cnt++;
+		}
 	}
 }
+
 
 void solution() {
-	for (int i = 0; i < a + b; i++) {
-		visited[i] = true;
-		dfs(arr[i]);
-		visited[i] = false;
+	func(a, pizzaA, cntA);
+	func(b, pizzaB, cntB);
+	for (int i = 1; i < n; i++) {
+		int j = n - i;
+		cnt += cntA[i] * cntB[j];
 	}
 	cout << cnt;
 }
