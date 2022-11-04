@@ -1,32 +1,27 @@
-﻿#include <string>
+#include <string>
 #include <vector>
 #include <unordered_map>
 using namespace std;
 
-unordered_map<string, int> map;
-bool check() {
-	for (auto &iter : map) {
-		if (iter.second)
-			return false;
-	}
-	return true;
-}
+
 
 int solution(vector<string> want, vector<int> number, vector<string> discount) {
 	int answer = 0;
 
+	unordered_map<string, int> require;
 	for (int i = 0; i < want.size(); i++)
-		map[want[i]] = number[i];
+		require[want[i]] = number[i];
 
-	for (int i = 0; i < discount.size(); i++) {
-		map[discount[i]]--;
-		if (i < 10) continue;
-		if (map.find(discount[i - 10]) != map.end()) {
-			map[discount[i - 10]]++;
+	for (int i = 0; i <= discount.size() - 10; i++) {
+		unordered_map<string, int> result;
+
+		for (int j = i; j < i + 10; j++) {
+			result[discount[j]] += 1;
 		}
-		if (check())
-			answer++;
 
+		//unordered_map은 == oper가 먹힘
+		if (result == require)
+			answer++;
 	}
 	return answer;
 }
