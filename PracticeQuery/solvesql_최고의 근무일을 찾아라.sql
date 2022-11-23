@@ -35,3 +35,5 @@ from
   tips
   group by day
 ) as result
+
+//https://solvesql.com/problems/best-working-day/
