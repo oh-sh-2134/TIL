@@ -1,8 +1,7 @@
-﻿#include <string>
+#include <string>
 #include <vector>
 #include <algorithm>
 using namespace std;
-string bitTree;
 string convertDec2Bin(long long n) {
 	string b = "";
 	while (n) {
@@ -19,7 +18,7 @@ string convertDec2Bin(long long n) {
 string makeTree(string s) {
 	long long k = 1;
 	while (true) {
-		if (s.size() <= k-1)
+		if (s.size() <= k - 1)
 			break;
 		k <<= 1;
 	}
@@ -28,22 +27,19 @@ string makeTree(string s) {
 
 
 bool checkNode(string s) {
-	long long mid = (s.length() - 1) / 2;
-	if (s[mid] == '0')
-		return false;
+	long long mid = (s.length()-1) / 2;
 	if (s.size() == 3)
-		return true;
-	bool result = true;
+		return ((s[0] - '1') + (s[2] - '1')) <= (s[1] - '1') ? true : false;
+	
+	if (checkNode(s.substr(0, mid)) && checkNode(s.substr(mid + 1)))
+		return s[mid] == '1';
 
-	if (checkNode(s.substr(0, mid)))
-		return checkNode(s.substr(mid+1, s.length()));
 	return false;
 }
 
 vector<int> solution(vector<long long> numbers) {
 	vector<int> answer;
-	for (auto &n : numbers) {
-		bitTree = makeTree(convertDec2Bin(n));
+	for (auto n : numbers) {
 		answer.push_back(checkNode(makeTree(convertDec2Bin(n))));
 	}
 	return answer;
