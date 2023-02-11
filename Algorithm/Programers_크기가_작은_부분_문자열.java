@@ -15,7 +15,6 @@ class Solution {
 }
 
 class main{
-
     public static void main(String[] args) {
         Solution sol = new Solution();
         String t = "3141592";
