@@ -1,0 +1,4 @@
+select distinct A.CAR_ID
+from CAR_RENTAL_COMPANY_CAR A, CAR_RENTAL_COMPANY_RENTAL_HISTORY B
+where A.CAR_ID = B.CAR_ID and CAR_TYPE = '세단' and MONTH(B.START_DATE) = '10'
+order by A.CAR_ID desc
