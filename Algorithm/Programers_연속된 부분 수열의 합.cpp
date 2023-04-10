@@ -4,30 +4,23 @@
 using namespace std;
 
 vector<int> solution(vector<int> sequence, int k) {
-	int n = sequence.size();
+    int maxSum = 0;
+    int left = 0;
+    vector<vector<int>> res;
+    for (int right = 0; right < sequence.size(); right++) {
+        while (maxSum < k && left < sequence.size()) {
+            maxSum += sequence[left];
+            left++;
+        }
+        if (maxSum == k) res.push_back({ right, left - 1, left - 1 - right });        
+        maxSum -= sequence[right];
+    }
 
-	int max_sum = 0;
-	int end = 0;
-
-	vector<vector<int>> res;
-	for (int i = 0; i < n; i++) {
-
-		while (max_sum < k && end < n) {
-			max_sum += sequence[end];
-			end++;
-		}
-
-		if (max_sum == k) {
-			res.push_back({ i, end - 1, end - 1 - i });
-		}
-
-		max_sum -= sequence[i];
-	}
-
-	sort(res.begin(), res.end(), [](vector<int>& a, vector<int>& b) {
-		return a[2] < b[2];
-	});
-	vector<int> answer = { res[0][0], res[0][1] };
-	return answer;
+    sort(res.begin(), res.end(), [](vector<int> a, vector<int> b) {
+        if(a[2] == b[2]) return a[0] < b[0];
+        return a[2] < b[2];
+    });
+    vector<int> answer = { res[0][0], res[0][1] };
+    return answer;
 }
-//https://school.programmers.co.kr/learn/courses/30/lessons/178870?language=cpp
+//https://school.programmers.co.kr/learn/courses/30/lessons/178870
