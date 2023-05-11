@@ -1,7 +1,9 @@
+
 #include <iostream>
 #include <vector>
 #include <string>
-#include <unordered_map>
+#include <map>
+
 using namespace std;
 
 class Pos {
@@ -10,7 +12,7 @@ public:
 		y = _y;
 		x = _x;
 	}
-	Pos();
+	Pos() {};
 	int y, x;
 };
 int dy[10] = {0,-1,-1,-1,0,0,0,1,1,1};
@@ -19,7 +21,7 @@ int n, m;
 vector<vector<char>> arr;
 string cmd;
 Pos jongduino;
-unordered_map<Pos,int> crazyArduinos;
+map<pair<int,int>,int> crazyArduinos;
 
 void input() {
 	cin >> n >> m;
@@ -28,7 +30,7 @@ void input() {
 		for (int j = 0; j < m; j++) {
 			cin >> arr[i][j];
 			if (arr[i][j] == 'I') jongduino = Pos(i, j);
-			else if (arr[i][j] == 'R') crazyArduinos[Pos(i, j)]++;
+			else if (arr[i][j] == 'R') crazyArduinos[{i, j}]++;
 		}
 	}
 	cin >> cmd;
@@ -39,6 +41,7 @@ bool moveJongduino(int d) {
 	jongduino.y += dy[d];
 	jongduino.x += dx[d];
 	if (arr[jongduino.y][jongduino.x] == 'R') return false;
+	arr[jongduino.y][jongduino.x] = 'I';
 	return true;
 }
 
@@ -49,26 +52,30 @@ bool moveCrazyArduinos() {
 				int moveDir = 0;
 				int minDist = 0x3f3f3f3f;
 				for (int dir = 1; dir <= 9; dir++) {
-					int nx = i + dx[dir];
-					int ny = j + dy[dir];
-					if (0 > nx || nx >= n || 0 > ny || ny >= m) continue;
+					int nx = j + dx[dir];
+					int ny = i + dy[dir];
+					if (0 > nx || nx >= m || 0 > ny || ny >= n) continue;
 					int dist = abs(nx - jongduino.x) + abs(ny - jongduino.y);
 					if (minDist > dist) {
 						moveDir = dir;
 						minDist = dist;
 					}
 				}
-				int nx = i + dx[moveDir];
-				int ny = j + dy[moveDir];
-				if (arr[nx][ny] == 'I') return false;
-				if (crazyArduinos[Pos(i, j)]) crazyArduinos[Pos(i, j)]--;
-				crazyArduinos[Pos(i, j)]++;
+				int nx = j + dx[moveDir];
+				int ny = i + dy[moveDir];
+				if (arr[ny][nx] == 'I') return false;
+				crazyArduinos[{i, j}]--;
+				crazyArduinos[{ny, nx}]++;
 			}
 		}
 	}
-	for (auto &arduino : crazyArduinos) {
-		if (arduino.second < 2) continue;
-		crazyArduinos.erase(arduino.first);
+	vector<Pos> v;
+	for (auto &arduino : crazyArduinos) {		
+		if (arduino.second == 1) continue;
+		v.push_back({ arduino.first.first, arduino.first.second });
+	}
+	for (auto e : v) {
+		crazyArduinos.erase({ e.y ,e.x});
 	}
 	return true;
 }
@@ -81,16 +88,25 @@ void freshMap() {
 	}
 	arr[jongduino.y][jongduino.x] = 'I';
 	for (auto &arduino : crazyArduinos) {
-		arr[arduino.first.y][arduino.first.x] = 'R';
+		arr[arduino.first.first][arduino.first.second] = 'R';
 	}
 }
 
 void solution() {
 	for (int i = 0; i < cmd.size(); i++) {
 		int dirc = cmd[i] - '0';
-		if (moveJongduino(dirc) && moveCrazyArduinos()) continue;
+		if (moveJongduino(dirc) && moveCrazyArduinos()) {
+			freshMap();
+			continue;
+		}
 		cout << "kraj " << i + 1; 
 		return; 		
+	}
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < m; j++) {
+			cout << arr[i][j];
+		}
+		cout << "\n";
 	}
 }
 
