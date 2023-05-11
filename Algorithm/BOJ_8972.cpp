@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <vector>
 #include <string>
@@ -15,7 +14,7 @@ public:
 	Pos() {};
 	int y, x;
 };
-int dy[10] = {0,-1,-1,-1,0,0,0,1,1,1};
+int dy[10] = {0,1,1,1,0,0,0,-1,-1,-1};
 int dx[10] = {0,-1,0,1,-1,0,1,-1,0,1};
 int n, m;
 vector<vector<char>> arr;
@@ -36,6 +35,7 @@ void input() {
 	cin >> cmd;
 }
 
+//종수아두이노 이동
 bool moveJongduino(int d) {
 	arr[jongduino.y][jongduino.x] = '.';
 	jongduino.y += dy[d];
@@ -44,13 +44,13 @@ bool moveJongduino(int d) {
 	arr[jongduino.y][jongduino.x] = 'I';
 	return true;
 }
-
+//미친아두이노 이동
 bool moveCrazyArduinos() {
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < m; j++) {
 			if (arr[i][j] == 'R') {
 				int moveDir = 0;
-				int minDist = 0x3f3f3f3f;
+				int minDist = 987654321;
 				for (int dir = 1; dir <= 9; dir++) {
 					int nx = j + dx[dir];
 					int ny = i + dy[dir];
@@ -69,6 +69,7 @@ bool moveCrazyArduinos() {
 			}
 		}
 	}
+	//곂처진 아두이노 삭제
 	vector<Pos> v;
 	for (auto &arduino : crazyArduinos) {		
 		if (arduino.second == 1) continue;
@@ -80,6 +81,7 @@ bool moveCrazyArduinos() {
 	return true;
 }
 
+//지도 다시 그림
 void freshMap() {
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < m; j++) {
